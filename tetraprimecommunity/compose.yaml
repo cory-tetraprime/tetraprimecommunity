@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/tetraprimecommunity
+    ports:
+      - "8000:8000"
+    environment:
+      - "DJANGO_SETTINGS_MODULE=tetraprimecommunity.settings.dev"
+#      - "DJANGO_SETTINGS_MODULE=tetraprimecommunity.settings.production"
+      - "DJANGO_SECRET_KEY=django-insecure-#9$$gh553_y^vd=3kg_&v#a#rny1%xw=&dsgxdo58+a1qd8qep*"
+      - "DJANGO_DEBUG=True"
+      - "DJANGO_SECURE_SSL_REDIRECT=False"
+      - "DJANGO_SECURE_HSTS_SECONDS=0"
+      - "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=False"
+      - "DJANGO_SECURE_HSTS_PRELOAD=False"
+      - "DJANGO_SESSION_COOKIE_SECURE=False"
+      - "DJANGO_CSRF_COOKIE_SECURE=False"

@@ -50,7 +50,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    'wagtail.contrib.modeladmin',
+    'wagtail.contrib.table_block',
     "network_main",
+    'inside_default',
 ]
 
 MIDDLEWARE = [
@@ -89,7 +93,7 @@ WSGI_APPLICATION = "tetraprimecommunity.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-# Moved to dev.py and production.py
+# dev.py and production.py
 
 
 # Password validation

@@ -7,7 +7,7 @@ from wagtail.admin.panels import FieldPanel
 from wagtail.images.blocks import ImageChooserBlock
 
 
-class HomePage(Page):
+class InsidePage(Page):
     body = StreamField([
         ('heading', blocks.CharBlock(form_classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
@@ -19,3 +19,7 @@ class HomePage(Page):
         FieldPanel('body',),
     ]
 
+    # This is optional: it helps define how your model will appear in the Wagtail admin
+    class Meta:
+        verbose_name = "Inside Page"
+        verbose_name_plural = "Inside Pages"

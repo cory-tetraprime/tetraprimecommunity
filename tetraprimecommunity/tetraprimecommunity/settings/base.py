@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.redirects",
     "wagtail.embeds",
     "wagtail.sites",
-    "wagtail.users",
+    # "wagtail.users",
     "wagtail.snippets",
     "wagtail.documents",
     "wagtail.images",
@@ -45,7 +45,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Custom apps
+    "accounts",
 ]
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",

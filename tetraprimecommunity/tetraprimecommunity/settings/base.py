@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -163,7 +164,7 @@ STORAGES = {
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "tetraprimecommunity"
+WAGTAIL_SITE_NAME = "Tetra Prime Community"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html

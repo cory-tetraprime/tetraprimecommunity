@@ -1,6 +1,6 @@
-from django.apps import AppConfig
+# myproject/apps.py
+from wagtail.users.apps import WagtailUsersAppConfig
 
 
-# class AccountsConfig(AppConfig):
-    # default_auto_field = 'django.db.models.BigAutoField'
-    # name = 'accounts'
+class CustomUsersAppConfig(WagtailUsersAppConfig):
+    user_viewset = "accounts.viewsets.UserViewSet"

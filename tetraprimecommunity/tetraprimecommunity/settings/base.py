@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     "wagtail.contrib.redirects",
     "wagtail.embeds",
     "wagtail.sites",
+    "accounts",
+    "accounts.apps.CustomUsersAppConfig",
     # "wagtail.users",
     "wagtail.snippets",
     "wagtail.documents",
@@ -46,7 +48,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Custom apps
-    "accounts",
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'

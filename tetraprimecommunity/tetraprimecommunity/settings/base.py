@@ -49,10 +49,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Custom apps
+    'images',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+WAGTAILIMAGES_IMAGE_MODEL = 'images.CustomImage'
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",

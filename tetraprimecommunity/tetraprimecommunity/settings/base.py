@@ -50,11 +50,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Custom apps
     'images',
+    'documents',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 WAGTAILIMAGES_IMAGE_MODEL = 'images.CustomImage'
+WAGTAILDOCS_DOCUMENT_MODEL = 'documents.CustomDocument'
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",

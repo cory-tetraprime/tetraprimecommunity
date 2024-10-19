@@ -5,6 +5,8 @@ from .forms import CustomUserCreationForm, CustomUserEditForm
 
 
 class UserViewSet(WagtailUserViewSet):
+    template_prefix = "accounts/"
+
     def get_form_class(self, for_update=False):
         if for_update:
             return CustomUserEditForm

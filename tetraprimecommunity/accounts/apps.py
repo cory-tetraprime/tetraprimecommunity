@@ -1,4 +1,3 @@
-# myproject/apps.py
 from wagtail.users.apps import WagtailUsersAppConfig
 
 

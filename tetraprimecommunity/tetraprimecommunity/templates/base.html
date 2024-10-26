@@ -1,7 +1,7 @@
 {% load static wagtailcore_tags wagtailuserbar %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100" data-bs-theme="dark">
     <head>
         <meta charset="utf-8" />
         <title>
@@ -23,6 +23,9 @@
         <base target="_blank">
         {% endif %}
 
+
+        <link href="{% static 'lib/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
         {# Global stylesheets #}
         <link rel="stylesheet" type="text/css" href="{% static 'css/tetraprimecommunity.css' %}">
 
@@ -35,6 +38,9 @@
         {% wagtailuserbar %}
 
         {% block content %}{% endblock %}
+
+
+        <script src="{% static 'lib/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js' %}"></script>
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/tetraprimecommunity.js' %}"></script>

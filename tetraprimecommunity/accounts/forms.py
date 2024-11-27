@@ -3,14 +3,12 @@ from django.contrib.auth import get_user_model
 from wagtail.users.forms import UserEditForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
-# from .models import MembershipStatus
-
 User = get_user_model()
 
 
 class CustomUserEditForm(UserEditForm):
     country = forms.CharField(required=False, label=_("Country"))
-    # status = forms.ModelChoiceField(queryset=MembershipStatus.object, required=True, label=_("Membership Status"))
+    # profile_picture = forms.ImageField(required=False)
 
     class Meta(UserEditForm.Meta):
         model = User
@@ -18,9 +16,16 @@ class CustomUserEditForm(UserEditForm):
 
 
 class CustomUserCreationForm(UserCreationForm):
-    country = forms.CharField(required=False, label=_("Country"))
-    # status = forms.ModelChoiceField(queryset=MembershipStatus.object, required=False, label=_("Membership Status"))
+    country = forms.CharField(required=True, label=_("Country"))
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = UserCreationForm.Meta.fields | {'country'}
+        # fields = UserCreationForm.Meta.fields | {'country'}
+        fields = ['username', 'email', 'password1', 'password2', 'country']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Explicitly remove unwanted fields
+        for field_name in ['is_superuser', 'is_staff', 'groups', 'user_permissions']:
+            if field_name in self.fields:
+                del self.fields[field_name]

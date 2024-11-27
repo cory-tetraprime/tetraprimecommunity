@@ -56,9 +56,11 @@ INSTALLED_APPS = [
     # Custom apps
     'images',
     'documents',
+    'social',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 WAGTAILIMAGES_IMAGE_MODEL = 'images.CustomImage'
 WAGTAILDOCS_DOCUMENT_MODEL = 'documents.CustomDocument'

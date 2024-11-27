@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .actions a {
+            margin: 0 10px;
+            text-decoration: none;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 4px;
+        }
+        .actions a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        {% if user.is_staff %}
+        <p><strong>Role:</strong> Administrator</p>
+        {% else %}
+        <p><strong>Role:</strong> Regular User</p>
+        {% endif %}
+        {% if user.country %}
+        <p><strong>Country:</strong> {{ user.country }}</p>
+        {% endif %}
+        <div class="actions">
+            <button>Edit Profile</button> <!-- Replace # with the actual URL for editing profile -->
+            <form method="post" action="{% url 'logout' %}" style="display: inline-block;">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

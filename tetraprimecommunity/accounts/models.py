@@ -26,4 +26,6 @@ from wagtail.admin.panels import FieldPanel
 
 class CustomUser(AbstractUser):
     country = models.CharField(verbose_name='country', max_length=50)
+    # profile_picture = models.ImageField(upload_to='users/profile_pictures/', blank=True, null=True)
+
     # status = models.ForeignKey(MembershipStatus, on_delete=models.SET_NULL, null=True, blank=True)

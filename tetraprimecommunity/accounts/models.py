@@ -26,6 +26,15 @@ from wagtail.admin.panels import FieldPanel
 
 class CustomUser(AbstractUser):
     country = models.CharField(verbose_name='country', max_length=50)
-    # profile_picture = models.ImageField(upload_to='users/profile_pictures/', blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='users/profile_pictures/', blank=True, null=True)
 
     # status = models.ForeignKey(MembershipStatus, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.profile_picture:
+            print(f"Before Save - File Path: {self.profile_picture.path}")
+            print(f"Before Save - File URL: {self.profile_picture.url}")
+        super().save(*args, **kwargs)  # Call the default save method
+        if self.profile_picture:
+            print(f"After Save - File Path: {self.profile_picture.path}")
+            print(f"After Save - File URL: {self.profile_picture.url}")

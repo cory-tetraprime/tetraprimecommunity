@@ -11,9 +11,18 @@
             padding: 0;
             background-color: #f4f4f4;
         }
+        header {
+            max-width: 800px;
+            margin: 1rem auto;
+        }
+
+        nav {
+            text-align: right;
+        }
+        
         .container {
             max-width: 800px;
-            margin: 50px auto;
+            margin: 1rem auto;
             background: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -42,22 +51,34 @@
         .actions a:hover {
             background-color: #0056b3;
         }
+        .profile-picture {
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="/social/people/">Find People</a>
+        </nav>
+    </header>
     <div class="container">
-        <h1>Welcome, {{ user.username }}!</h1>
-        <p><strong>Email:</strong> {{ user.email }}</p>
+        <h1>Welcome, {{ user.first_name }}!</h1>
+        {% if user.profile_picture %}
+        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" width="100" class="profile-picture">
+        {% endif %}
+        <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+        <p>{{ user.email }}</p>
         {% if user.is_staff %}
         <p><strong>Role:</strong> Administrator</p>
         {% else %}
-        <p><strong>Role:</strong> Regular User</p>
+        <!--<p><strong>Role:</strong> Regular User</p>-->
         {% endif %}
         {% if user.country %}
-        <p><strong>Country:</strong> {{ user.country }}</p>
+        <p><em>{{ user.country }}</em></p>
         {% endif %}
         <div class="actions">
-            <button>Edit Profile</button> <!-- Replace # with the actual URL for editing profile -->
+            <a href="/accounts/edit-profile/">Edit Profile</a> <!-- Replace # with the actual URL for editing profile -->
             <form method="post" action="{% url 'logout' %}" style="display: inline-block;">
                 {% csrf_token %}
                 <button type="submit">Logout</button>

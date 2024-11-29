@@ -16,8 +16,8 @@ class CustomUserAdmin(UserAdmin):
 
     # To display custom fields in the admin form
     fieldsets = UserAdmin.fieldsets + (
-        ('Custom User Info', {'fields': ('country',)}),
+        ('Custom User Info', {'fields': ('country', 'profile_picture')}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
-        ('Custom User Info', {'fields': ('country',)}),
+        ('Custom User Info', {'fields': ('country', 'profile_picture')}),
     )

@@ -1,15 +1,81 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Sign Up</title>
+
+    <style>
+        body .form-control {
+            border: 1px solid gray;
+            border-radius: .5rem;
+            padding: .5rem;
+        }
+        body .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+    </style>
 </head>
 <body>
-    <h2>Sign Up</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Sign Up</button>
-    </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+<h2>New Community Profile</h2>
+<img src="{% static 'img/TPC_Logo__--v1_--1K.original.png' %}" loading="lazy" width="60px">
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="id_email" class="form-label">Email</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label for="id_username" class="form-label">Username</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="id_first_name" class="form-label">First Name</label>
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="id_last_name" class="form-label">Last Name</label>
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="id_country" class="form-label">Country</label>
+            {{ form.country }}
+            {{ form.country.errors }}
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <img src="{% static 'custom/images/noob-pfp-16.jpg' %}" loading="lazy" width="80px">
+        <br>
+        <label for="id_profile_picture" class="form-label">Profile Picture</label>
+        {{ form.profile_picture }}
+        {{ form.profile_picture.errors }}
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="id_password1" class="form-label">Password</label>
+            {{ form.password1 }}
+            {{ form.password1.errors }}
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="id_password2" class="form-label">Confirm Password</label>
+            {{ form.password2 }}
+            {{ form.password2.errors }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+</form>
+
+<p>Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
 </body>
 </html>

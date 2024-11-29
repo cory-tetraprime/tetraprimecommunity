@@ -72,6 +72,7 @@
             border-radius: 6px;
             font-size: 1rem;
             padding: .6rem;
+            width: 90%;
         }
 
         #profile--banner {
@@ -102,7 +103,7 @@
             <h2>{{ user.first_name }} {{ user.last_name }}</h2>
             <p>{{ user.email }}</p>
             {% if user.is_staff %}
-            <p><strong>Role:</strong> Administrator</p>
+            <p><strong>TPC Staff</strong></p>
             {% endif %}
             {% if user.country %}
             <p><em>{{ user.country }}</em></p>
@@ -120,7 +121,7 @@
         </div>
         <div class="column-2">
             <div>
-                <input id="field--whatsnew" type="text" placeholder="What's new?"><button type="submit">&gt;</button>
+                <input id="field--whatsnew" type="text" placeholder="What are you curious about today?"><button type="submit">&gt;</button>
             </div>
             <hr>
             <h2>For You</h2>

@@ -37,7 +37,7 @@
             {% if user.profile_picture %}
             <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s avatar" width="60" height="60">
             {% endif %}
-            <h2>{{ user.first_name }} {{ user.last_name }} {% if user == request.user %}<sup>(You)</sup>{% endif %}</h2>
+            <h2>{{ user.first_name }} {{ user.last_name }}{% if user == request.user %}<sup> (You)</sup>{% endif %}{% if user.is_staff %}<sup> (TPC Staff)</sup>{% endif %}</h2>
             <a href="{% url 'profile_user' user.id %}">@{{ user.username }}</a>
         </li>
     {% endfor %}

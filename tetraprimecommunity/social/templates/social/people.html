@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        padding: 2rem;
+    }
+
+    h2 { font-size: 1.2rem; margin: 0; padding: .5rem 0 .1rem 0; }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    ul li {
+        margin-bottom: 2rem;
+    }
+
+    ul li img {
+        border-radius: 50%;
+        float: left;
+        margin: .2rem .4rem .2rem 0;
+    }
+
+    a {
+        text-decoration: none;
+        font-size: .8rem;
+    }
+</style>
+
+<h1>People</h1>
+
+<ul>
+    {% for user in page_obj.object_list %}
+        <li>
+            {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s avatar" width="60" height="60">
+            {% endif %}
+            <h2>{{ user.first_name }} {{ user.last_name }} {% if user == request.user %}<sup>(You)</sup>{% endif %}</h2>
+            <a href="{% url 'profile_user' user.id %}">@{{ user.username }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<!-- Pagination Controls -->
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

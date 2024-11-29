@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login
@@ -6,6 +6,9 @@ from django.contrib.auth.views import LogoutView
 from .forms import CustomUserCreationForm, CustomUserEditForm
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def signup_view(request):
@@ -29,6 +32,12 @@ def signup_view(request):
 @login_required
 def profile_view(request):
     return render(request, 'accounts/profile.html', {'user': request.user})
+
+
+@login_required
+def profile_view_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    return render(request, 'accounts/profile.html', {'user': user})
 
 
 @login_required

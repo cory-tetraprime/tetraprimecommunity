@@ -1,0 +1,8 @@
+<form method="post">
+    {% csrf_token %}
+    <label>
+        <input type="checkbox" name="dark_mode" {% if dark_mode %}checked{% endif %}>
+        Enable Dark Mode
+    </label>
+    <button type="submit">Save</button>
+</form>

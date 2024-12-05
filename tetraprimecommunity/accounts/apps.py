@@ -6,9 +6,9 @@ class CustomUsersAppConfig(WagtailUsersAppConfig):
     user_viewset = "accounts.viewsets.UserViewSet"
 
 
-class AccountsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'accounts'
-
-    def ready(self):
-        import accounts.signals
+# class AccountsConfig(AppConfig):
+#     default_auto_field = 'django.db.models.BigAutoField'
+#     name = 'accounts'
+#
+#     def ready(self):
+#         import accounts.signals

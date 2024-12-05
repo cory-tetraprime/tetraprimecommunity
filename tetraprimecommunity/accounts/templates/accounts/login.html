@@ -1,83 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f7f7f7;
-        }
-        .login-container {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        .login-container h2 {
-            margin-bottom: 1rem;
-            text-align: center;
-            color: #333;
-        }
-        .login-container form {
-            display: flex;
-            flex-direction: column;
-        }
-        .login-container label {
-            margin-bottom: 0.5rem;
-            color: #555;
-        }
-        .login-container input {
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .login-container button {
-            padding: 0.75rem;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .login-container button:hover {
-            background-color: #0056b3;
-        }
-        .login-container p {
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-        .login-container p a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .login-container p a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>.</p>
-        <p><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_class %}page-login d-flex align-items-center py-4 bg-body-tertiary{% endblock %}
+
+{% block content %}
+<!--<h2>Login</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>-->
+
+<style>
+    input[type="text"], input[type="password"] {
+        border: 1px solid #ccc;
+        border-radius: .4rem;
+        font-size: 1.2rem;
+        padding: .5rem .8rem;
+        width: 100%;
+    }
+</style>
+<main class="form-signin m-auto mt-5 p-5">
+    <form method="post">
+        <img class="header--logo-40 mb-4" src="{% static 'img/TPC Logo  --v1 --200px.png' %}" alt="" width="80">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        {% csrf_token %}
+        <div class="form-floating mb-3">
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+        <div class="form-floating">
+            {{ form.password }}
+            {{ form.password.errors }}
+        </div>
+
+        <div class="form-check text-start my-3">
+            <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+                Remember me
+            </label>
+        </div>
+        <button class="btn btn-primary py-2" type="submit">Sign in</button>
+
+        <p class="mt-4">
+            Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>.
+        <br>
+            <a href="{% url 'password_reset' %}">Forgot your password?</a>
+        </p>
+    </form>
+</main>
+{% endblock %}

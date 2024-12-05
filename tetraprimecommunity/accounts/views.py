@@ -74,6 +74,19 @@ def change_password_view(request):
     return render(request, 'accounts/change_password.html', {'form': form})
 
 
+@login_required
+def profile_settings_view(request):
+    preferences = request.user.preferences  # Access the Preferences object
+    dark_mode = preferences.get_preference('dark_mode', default=False)
+
+    if request.method == 'POST':
+        # Update dark mode preference
+        dark_mode = request.POST.get('dark_mode') == 'on'
+        preferences.set_preference('dark_mode', dark_mode)
+
+    return render(request, 'profile_settings.html', {'dark_mode': dark_mode})
+
+
 class CustomLogoutView(LogoutView):
     # Add any custom logic here, such as logging or extra messages
     pass

@@ -1,6 +1,12 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_class %}page-discover{% endblock %}
+
 {% block content %}
-<style>
+
+{% include 'accounts/includes/header-tag.html' %}
+<!--<style>
     body {
         padding: 2rem;
     }
@@ -27,38 +33,65 @@
         text-decoration: none;
         font-size: .8rem;
     }
-</style>
+</style>-->
 
-<h1>People</h1>
+<main class="container">
+    <!--<div class="row">
+        <div id="profile&#45;&#45;banner">
+            <img src="">
+        </div>
+    </div>-->
+    <div class="row mt-3">
+        <div class="col-md-3 p-4">
+            {% include 'accounts/includes/profile-nav-left.html' %}
+        </div>
+        <div class="col-md-9 p-4 d-flex flex-column align-items-center mt-3">
+            <h1 class="text-center">Discover</h1>
+            <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
 
-<ul>
-    {% for user in page_obj.object_list %}
-        <li>
-            {% if user.profile_picture %}
-            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s avatar" width="60" height="60">
-            {% endif %}
-            <h2>{{ user.first_name }} {{ user.last_name }}{% if user == request.user %}<sup> (You)</sup>{% endif %}{% if user.is_staff %}<sup> (TPC Staff)</sup>{% endif %}</h2>
-            <a href="{% url 'profile_user' user.id %}">@{{ user.username }}</a>
-        </li>
-    {% endfor %}
-</ul>
+            {% for user in page_obj.object_list %}
+                <div class="col">
+                    <a href="{% url 'profile_user' user.id %}" class="results--person">
+                        <div class="card">
+                          <div class="row g-0">
+                            <div class="col-md-4">
+                            {% if user.profile_picture %}
+                              <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-start" alt="{{ user.username }}'s avatar">
+                            {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                              <div class="card-body">
+                                <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+                                <!--{% if user == request.user %}<p class="card-text">(You) {% endif %}{% if user.is_staff %}TPC Staff</p>{% endif %}-->
+                                <p class="card-text">@{{ user.username }}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+            </div>
 
-<!-- Pagination Controls -->
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; First</a>
-            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
+            <!-- Pagination Controls -->
+            <div class="pagination mt-5">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    {% endif %}
 
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">Next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-        {% endif %}
-    </span>
-</div>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}

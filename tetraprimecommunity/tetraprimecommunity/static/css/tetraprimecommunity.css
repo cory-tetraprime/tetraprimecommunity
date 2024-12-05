@@ -1,0 +1,107 @@
+
+    html {
+        background: #fff;
+    }
+
+    body {
+        background: #fff;
+        background: linear-gradient(180deg, rgba(179,200,233,1) 0%, rgba(255,255,255,1) 60%);
+        background-repeat: no-repeat;
+        color: #000;
+    }
+
+    a { color: #000; text-decoration: none; }
+
+    header {
+
+    }
+
+        header img.header--logo-40 {
+            height: 40px;
+        }
+
+        header ul.nav {
+            font-size: 1.2rem;
+        }
+
+        header input[type="search"] {
+            background: transparent;
+            border: 0 solid #a7a7a7;
+            min-width: 240px;
+        }
+
+        header input[type="search"]::placeholder {
+            color: #555;
+        }
+
+        header .header--userdropdown button {
+        }
+
+    main {
+        background-color: #fff;
+        border-radius: 1rem;
+        box-shadow: 0px -10px 12px #0000001c;
+        overflow: hidden;
+        margin-bottom: 100px;
+    }
+
+        main .profile-picture {
+            border: 6px solid #fff;
+            border-radius: 50%;
+            box-shadow: 0px -10px 12px #0000001c;
+            height: 180px;
+            margin-top: -8rem;
+            width: 180px
+
+        }
+
+    nav {
+
+    }
+
+        nav ul {
+            font-size: 1.4rem;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+
+        }
+
+            nav ul li {
+                margin-bottom: 1rem;
+            }
+
+                nav ul li a {
+                    transition: margin-left .3s;
+                }
+
+                nav ul li a:hover {
+                    margin-left: .4rem;
+                }
+
+    #profile--banner {
+        background-color: #5f9996;
+        height: 240px;
+    }
+
+
+ /* Login page */
+ .page-login main {
+    width: 360px;
+ }
+
+ /* Signup page */
+ .page-signup main {
+    min-width: 360px;
+    max-width: 980px;
+    width: 50%;
+ }
+
+ /* Discover page */
+ .page-discover a.results--person .card {
+    transition: box-shadow .3s, transform .3s;
+ }
+     .page-discover a.results--person:hover .card {
+        box-shadow: 0px 10px 12px #d7d7d7;
+        transform: translate(0, -6px);
+     }

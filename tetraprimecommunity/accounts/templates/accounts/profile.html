@@ -1,127 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            max-width: 1000px;
-            margin: 1rem auto 0 auto;
-        }
+{% extends "base.html" %}
+{% load static %}
 
-        nav {
-            text-align: right;
-        }
+{% block body_class %}{% endblock %}
 
-        .container {
-            display: flex;
-            max-width: 1000px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-            .container .column-1 {
-                margin-right: 10%;
-                padding: 2rem;
-                width: 20%;
-            }
-            .container .column-2 {
-                padding: 2rem;
-                width: 70%;
-            }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        p {
-            font-size: 16px;
-            color: #555;
-        }
-        .actions {
-            margin: 3rem 0 0 0;
-            text-align: center;
-        }
-        .actions a, .actions button {
-            display: inline-block;
-            margin: .2rem auto;
-            text-decoration: none;
-            padding: 10px 20px;
-            color: #fff;
-            background-color: #007bff;
-            border-radius: 4px;
-            border: none;
-            font-size: 0.6rem;
-        }
-        .actions a:hover {
-            background-color: #0056b3;
-        }
-        .profile-picture {
-            border-radius: 50%;
-        }
+{% block content %}
 
-        #field--whatsnew {
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-            padding: .6rem;
-            width: 90%;
-        }
+{% include 'accounts/includes/header-tag.html' %}
 
-        #profile--banner {
-            margin-top: 1rem;
-            width: 100%;
-        }
-
-            #profile--banner img {
-                width: 100%;
-                height: 180px;
-            }
-    </style>
-</head>
-<body>
-    <header>
-        <nav>
-            <a href="{% url 'people' %}">Find People</a>
-        </nav>
+<main class="container">
+    <div class="row">
         <div id="profile--banner">
             <img src="">
         </div>
-    </header>
-    <div class="container">
-        <div class="column-1">
+    </div>
+    <div class="row mt-3">
+        <div class="col col-md-3 p-4">
+            {% include 'accounts/includes/profile-nav-left.html' %}
+        </div>
+        <div class="col p-4 d-flex flex-column align-items-center">
             {% if user.profile_picture %}
             <img src="{{ user.profile_picture.url }}" alt="Profile Picture" width="100" class="profile-picture">
             {% endif %}
-            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-            <p>{{ user.email }}</p>
+
+            <h2 class="profile--title mt-2">{{ user.first_name }} {{ user.last_name }}</h2>
+            <!--<p>{{ user.email }}</p>-->
+
             {% if user.is_staff %}
             <p><strong>TPC Staff</strong></p>
             {% endif %}
+
+            <p><span id="user--info-datejoined">Joined</span> {{ user.date_joined|date:"m/d/Y" }}</p>
+
             {% if user.country %}
             <p><em>{{ user.country }}</em></p>
             {% endif %}
-            {% if user == request.user %}
+
+            <p><span id="user--info-cookies">0</span> Cookies</p>
+            <p><span id="user--info-connects">0</span> Connections</p>
+
             <div class="actions">
-                <a href="/accounts/edit-profile/">Edit Profile</a>
-                <br>
-                <form method="post" action="{% url 'logout' %}" style="display: inline-block;">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
+                {% if user == request.user %}
+                <!--                <a href="/accounts/edit-profile/">Edit Profile</a>-->
+                <!--                <a href="{% url 'profile_settings' %}">Preferences</a>-->
+                <!--                <br>-->
+                <!--                <form method="post" action="{% url 'logout' %}" style="display: inline-block;">-->
+                <!--                    {% csrf_token %}-->
+                <!--                    <button type="submit">Logout</button>-->
+                <!--                </form>-->
+                {% endif %}
+
+                {% if user != request.user %}
+                <a href="#follow">Connect</a>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
-        <div class="column-2">
-            <div>
-                <input id="field--whatsnew" type="text" placeholder="What are you curious about today?"><button type="submit">&gt;</button>
+        <div class="col col-md-3 p-4">
+            <div class="row">
+                <div class="d-flex align-items-center">
+                    <input id="field--whatsnew" class="form-control me-2" type="text"
+                           placeholder="What are you curious about?">
+                    <button class="btn btn-outline-secondary" type="submit">&gt;</button>
+                </div>
             </div>
             <hr>
             <h2>For You</h2>
@@ -130,5 +69,5 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+</main>
+{% endblock %}

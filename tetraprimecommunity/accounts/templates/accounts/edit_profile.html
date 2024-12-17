@@ -1,80 +1,428 @@
 {% extends "base.html" %}
 {% load static %}
+{% load preferences_filters %}
 
-{% block body_class %}{% endblock %}
+{% block body_class %}page-edit-profile{% endblock %}
 
 {% block content %}
 
 {% include 'accounts/includes/header-tag.html' %}
-<style>
+<style xmlns:user>
     form label { font-weight: bold; }
 </style>
 <main class="container">
     <div class="row">
-        <div id="profile--banner">
-            <img src="">
-        </div>
+        {% include 'accounts/includes/profile-banner.html' %}
     </div>
     <div class="row mt-3">
-        <div class="col col-md-3 p-4">
+        <!--<div class="col col-md-3 p-4">
+            {% comment %}
             {% include 'accounts/includes/profile-nav-left.html' %}
-        </div>
-        <div class="col p-4 d-flex flex-column align-items-center">
-            {% if user.profile_picture %}
-            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" width="100" class="profile-picture">
+            {% endcomment %}
+        </div>-->
+        <div class="col p-4 px-5 pt-0 d-flex flex-column position-relative">
+            <div id="profile--action-bar" class="row d-flex flex-row fs-5 w-100">
+                <div class="col-auto"><span id="user--info-cookies">1</span> <i class="bi bi-cookie" title="Cookies"></i></div>
+                <div class="col-auto"><span id="user--info-connects">0</span> <i class="bi bi-people-fill" title="Connections"></i></div>
+                <div class="col d-flex justify-content-center">
+                    {% if user|get_preference:"private_profile" != True %}
+                    <a href="https://tetraprime.community/accounts/profile/@{{ user.username }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-share" title="Share Profile"></i></a>
+                    {% else %}
+                    <a href="javascript:void(0);" class="btn btn-dark btn-sm"><i class="bi bi-eye-slash" title="Private Profile"></i></a>
+                    {% endif %}
+                </div>
+                {% if user != request.user %}
+                <div class="col-auto d-flex justify-content-center">
+                    <a href="#follow" class="btn btn-outline-primary btn-sm"><i class="bi bi-people-fill" title="Connections"></i> Connect</a>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if profile_user.profile_picture %}
+            <img src="{{ profile_user.profile_picture.url }}" alt="Profile Picture" width="100" class="profile-picture align-self-center mb-4">
+            {% else %}
+            <img src="{{ GENERIC_USER_PFP }}" alt="Profile Picture" class="profile-picture align-self-center mb-4">
             {% endif %}
-            <h1 class="text-center">Edit Profile</h1>
+<!--            <h1 class="text-center mb-4">Edit Profile</h1>-->
+            <h1 class="fs-2 mb-4 text-center"><i class="bi bi-person-vcard"></i> Profile Basics</h1>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+                {{ form.non_field_errors }}
                 <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label for="id_first_name" class="form-label">Display Name</label>
+                    <div class="col-md-6 mb-5">
+                        <label for="id_username" class="form-label">Display Name</label>
                         {{ form.username }}
                         {{ form.username.errors }}
                     </div>
-                    <div class="col-md-6 mb-4">
-                        <label for="id_first_name" class="form-label">First Name</label>
-                        {{ form.first_name }}
-                        {{ form.first_name.errors }}
-                    </div>
-                    <div class="col-md-6 mb-4">
-                        <label for="id_last_name" class="form-label">Last Name</label>
-                        {{ form.last_name }}
-                        {{ form.last_name.errors }}
-                    </div>
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-6 mb-5">
                         <label for="id_email" class="form-label">Email</label>
                         {{ form.email }}
                         {{ form.email.errors }}
                     </div>
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-6 mb-5">
+                        <label for="id_first_name" class="form-label">First Name</label>
+                        {{ form.first_name }}
+                        {{ form.first_name.errors }}
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <label for="id_last_name" class="form-label">Last Name</label>
+                        {{ form.last_name }}
+                        {{ form.last_name.errors }}
+                    </div>
+                    <div class="col-md-6 mb-5">
                         <label for="id_country" class="form-label">Country</label>
                         {{ form.country }}
                         {{ form.country.errors }}
                     </div>
-                    <div class="col mb-4">
-                        <label for="id_profile_picture" class="form-label">Profile Picture</label>
+                    <div class="col-12 mb-5">
+                        <label for="id_bio_intro" class="form-label">Profile Bio</label>
+                        {{ form.bio_intro }}
+                        {{ form.bio_intro.errors }}
+                    </div>
+                    <div class="col-4 mb-5">
+                        <h2 class="form-label fs-3">Profile Picture</h2>
                         <div class="mt-1 mb-2">
-                            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" width="100">
-                        </div>
-                        {{ form.profile_picture }}
-                        {{ form.profile_picture.errors }}
-                        {% if user.profile_picture %}
+                        {% if profile_user.profile_picture %}
+                            <img src="{{ profile_user.profile_picture.url }}" alt="Profile Picture" class="rounded w-75">
                         {% endif %}
+                        </div>
+                        <input
+                            type="file"
+                            name="profile_picture"
+                            id="id_profile_picture"
+                            class="mb-2"
+                            accept="image/*">
+                        <br>
+                        <input type="checkbox" name="profile_picture-clear" id="profile_picture-clear_id">
+                        <label for="profile_picture-clear_id">Clear</label>
+                        {{ form.profile_picture.errors }}
+                        {% comment %}
+                            {{ form.profile_picture }}
+                        {% endcomment %}
+                        <!--<br>
+                        <h3 class="mt-5 mb-3 fs-4">PFP Options</h3>
+                        <p><strong>Border Shape</strong></p>
+                        <div class="d-flex flex-direction-row">
+                            <input type="radio" id="pfp_shape_1" class="me-1" name="pfp_shape" value="1" />
+                            <div class="me-4" style="background-color: #999; border-radius: 15%; height: 50px; width: 50px;"></div>
+                            <input type="radio" id="pfp_shape_2" class="me-1" name="pfp_shape" value="2" />
+                            <div class="me-4" style="background-color: #999; border-radius: 35%; height: 50px; width: 50px;"></div>
+                            <input type="radio" id="pfp_shape_3" class="me-1" name="pfp_shape" value="3" />
+                            <div style="background-color: #999; border-radius: 50%; height: 50px; width: 50px;"></div>
+                        </div>-->
                     </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary w-auto">Save Changes</button>
-                        &nbsp;or&nbsp;<a href="/accounts/profile/">Cancel</a>
+                    <div class="col-6 offset-md-2 mb-5">
+                        <h2 class="form-label fs-3">Profile Banner</h2>
+                        <div class="mt-1 mb-2">
+                        {% if user.banner_image %}
+                            <img src="{{ user.banner_image.url }}" alt="Banner Image" class="rounded w-100">
+                        {% endif %}
+                        </div>
+                        <input
+                            type="file"
+                            name="banner_image"
+                            id="id_banner_image"
+                            class="mb-2"
+                            accept="image/*">
+                        <br>
+                        <input type="checkbox" name="banner_image-clear" id="banner_image-clear_id">
+                        <label for="banner_image-clear_id">Clear</label>
+                        {{ form.banner_image.errors }}
+                        {% comment %}
+                            {{ form.banner_image }}
+                        {% endcomment %}
                     </div>
+                </div>
+                <div class="mt-1 mb-5 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-outline-success w-auto"><i class="bi bi-floppy-fill"></i> Save Profile</button>
+                </div>
+                <hr>
+                <h1 id="getting-to-know-you" class="fs-2 mt-5 mb-4 text-center"><i class="bi bi-person-plus-fill"></i> Getting To Know You</h1>
+                <div class="accordion mb-5" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="professional-overview">
+                            <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <span class="fs-4 mb-0 fw-normal"><i class="bi bi-person-lines-fill me-1 color-blueviolet"></i> Professional Overview</span>
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="professional-overview" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="mb-4">
+                                    <!--<label>
+                                        Current Professional Title:
+                                    </label>
+                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_current_professional_title" class="form-label">{{ form.bio_current_professional_title.label }}</label>
+                                    {{ form.bio_current_professional_title }}
+                                    {{ form.bio_current_professional_title.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Top technical skills:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_top_technical_skills" class="form-label">{{ form.bio_top_technical_skills.label }}</label>
+                                    {{ form.bio_top_technical_skills }}
+                                    {{ form.bio_top_technical_skills.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Relevant certifications:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_relevant_certifications" class="form-label">{{ form.bio_relevant_certifications.label }}</label>
+                                    {{ form.bio_relevant_certifications }}
+                                    {{ form.bio_relevant_certifications.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Favorite Tools & Technologies:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_favorite_tools_and_technologies" class="form-label">{{ form.bio_favorite_tools_and_technologies.label }}</label>
+                                    {{ form.bio_favorite_tools_and_technologies }}
+                                    {{ form.bio_favorite_tools_and_technologies.errors }}
+                                </div>
+                                <div class="mt-4 mb-2 d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-outline-success w-auto"><i class="bi bi-floppy-fill"></i> Save Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="aspirations-projects">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <span class="fs-4 mb-0 fw-normal"><i class="bi bi-ui-checks-grid me-1 color-lightcoral"></i> Aspirations & Projects</span>
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="aspirations-projects" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Career Goals:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_career_goals" class="form-label">{{ form.bio_career_goals.label }}</label>
+                                    {{ form.bio_career_goals }}
+                                    {{ form.bio_career_goals.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Areas for Growth:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_areas_for_growth" class="form-label">{{ form.bio_areas_for_growth.label }}</label>
+                                    {{ form.bio_areas_for_growth }}
+                                    {{ form.bio_areas_for_growth.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Dream Project:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_dream_project" class="form-label">{{ form.bio_dream_project.label }}</label>
+                                    {{ form.bio_dream_project }}
+                                    {{ form.bio_dream_project.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Projects You're Proud of:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_projects_youre_proud_of" class="form-label">{{ form.bio_projects_youre_proud_of.label }}</label>
+                                    {{ form.bio_projects_youre_proud_of }}
+                                    {{ form.bio_projects_youre_proud_of.errors }}
+                                </div>
+                                <div class="mt-4 mb-2 d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-outline-success w-auto"><i class="bi bi-floppy-fill"></i> Save Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="collaboration-teams">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <span class="fs-4 mb-0 fw-normal"><i class="bi bi-people-fill me-1 color-mediumseagreen"></i> Collaboration & Teams</span>
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="collaboration-teams" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Open for Collaboration On:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_open_for_collaboration_on" class="form-label">{{ form.bio_open_for_collaboration_on.label }}</label>
+                                    {{ form.bio_open_for_collaboration_on }}
+                                    {{ form.bio_open_for_collaboration_on.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Seeking a Mentor:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_seeking_a_mentor" class="form-label">{{ form.bio_seeking_a_mentor.label }}</label>
+                                    {{ form.bio_seeking_a_mentor }}
+                                    {{ form.bio_seeking_a_mentor.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Open to Mentoring Others:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_open_to_mentoring_others" class="form-label">{{ form.bio_open_to_mentoring_others.label }}</label>
+                                    {{ form.bio_open_to_mentoring_others }}
+                                    {{ form.bio_open_to_mentoring_others.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Need Help With:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_need_help_with" class="form-label">{{ form.bio_need_help_with.label }}</label>
+                                    {{ form.bio_need_help_with }}
+                                    {{ form.bio_need_help_with.errors }}
+                                </div>
+                                <div class="mt-4 mb-2 d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-outline-success w-auto"><i class="bi bi-floppy-fill"></i> Save Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="personality-interests">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                <span class="fs-4 mb-0 fw-normal"><i class="bi bi-stars me-1 color-dodgerblue"></i> Personality & Interests</span>
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="personality-interests" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Favorite Quote:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_favorite_quote" class="form-label">{{ form.bio_favorite_quote.label }}</label>
+                                    {{ form.bio_favorite_quote }}
+                                    {{ form.bio_favorite_quote.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Superpower:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_superpower" class="form-label">{{ form.bio_superpower.label }}</label>
+                                    {{ form.bio_superpower }}
+                                    {{ form.bio_superpower.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        First Experience in Tech:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_first_experience_in_tech" class="form-label">{{ form.bio_first_experience_in_tech.label }}</label>
+                                    {{ form.bio_first_experience_in_tech }}
+                                    {{ form.bio_first_experience_in_tech.errors }}
+                                </div>
+                                <div class="mb-4">
+<!--                                    <label>-->
+<!--                                        Hobbies & Passions:-->
+<!--                                    </label>-->
+<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
+                                    <label for="id_bio_hobbies_and_passions" class="form-label">{{ form.bio_hobbies_and_passions.label }}</label>
+                                    {{ form.bio_hobbies_and_passions }}
+                                    {{ form.bio_hobbies_and_passions.errors }}
+                                </div>
+                                <div class="mt-4 mb-2 d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-outline-success w-auto"><i class="bi bi-floppy-fill"></i> Save Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <h1 class="fs-2 mt-5 mb-4 text-center"><i class="bi bi-gear"></i> Preferences</h1>
+                <div class="row fs-5">
+                    <div class="col-12 mb-4">
+                        <label class="fw-normal">
+                            <span class="me-3 fw-bold">Private Profile</span>
+                            <input type="checkbox" name="private_profile" {% if user|get_preference:"private_profile" == True %}checked{% endif %}> Enable
+                        </label>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <label class="fw-normal">
+                            <span class="me-3 fw-bold">Onboarding</span>
+                            {% if user|get_preference:"onboarding_complete" != False %}
+                            <span class="fs-6"><em>(Complete: {{ user|get_preference:"onboarding_complete" }})</em></span>
+                            {% else %}
+                            <input type="checkbox" name="onboarding" {% if user|get_preference:"onboarding" != False %}checked{% endif %}> Enable <span class="fs-6"><em>(Complete: {{ user|get_preference:"onboarding_complete" }})</em></span>
+                            {% endif %}
+                        </label>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <label class="fw-normal">
+                            <span class="me-3 fw-bold">Dark Mode</span>
+                            <input type="checkbox" name="dark_mode" {% if user|get_preference:"dark_mode" %}checked{% endif %}> Enable
+                        </label>
+                    </div>
+                    <!--<div class="col-12 mb-4">
+                        <label class="fw-normal">
+                            <span class="me-3 fw-bold">Email Notifications</span>
+                            <input type="checkbox" name="email_notifications" {% if user|get_preference:"email_notifications" %}checked{% endif %}> Enable
+                        </label>
+                    </div>-->
+                    <!--<div class="col-12 mb-4">
+                        <label class="fw-normal">
+                            <span class="me-3 fw-bold">Language</span>
+                            <select name="language">
+                                <option value="en" {% if user|get_preference:"language" == 'en' %}selected{% endif %}>English</option>
+                                <option value="es" {% if user|get_preference:"language" == 'es' %}selected{% endif %}>Spanish</option>
+                            </select>
+                        </label>
+                    </div>-->
+                </div>
+
+                <div class="mt-4 mb-4 d-flex justify-content-center">
+                    <button class="btn btn-outline-success" type="submit"><i class="bi bi-floppy-fill"></i> Save Preferences</button>
                 </div>
             </form>
         </div>
-        <div class="col col-md-3 p-4">
+        <!--<div class="col col-md-3 p-4">
             <p><strong>Other Options</strong></p>
             <p><a href="#">Preferences</a></p>
             <p><a href="/accounts/change-password/">Change Password</a></p>
             <p><a href="#">Help Center</a></p>
-        </div>
+        </div>-->
     </div>
+
+    {% if messages %}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        {% for message in messages %}
+        <div id="myToast" class="toast fs-6 align-items-center text-white bg-{{ message.tags }} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+<!--          <div class="toast-header">-->
+<!--            -->
+<!--            <strong class="me-auto">Notification</strong>-->
+<!--            <small>Nice one!</small>-->
+<!--            -->
+<!--          </div>-->
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-bell-fill me-2"></i> {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close Notification" title="Close"></button>
+            </div>
+        </div>
+        {% endfor %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var toastEl = document.getElementById('myToast');
+
+                // Initialize the toast
+                var myToast = new bootstrap.Toast(toastEl);
+                myToast.show();
+            });
+        </script>
+    </div>
+    {% endif %}
 </main>
 {% endblock %}

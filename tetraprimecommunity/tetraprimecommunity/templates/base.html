@@ -1,7 +1,8 @@
 {% load static wagtailcore_tags wagtailuserbar %}
+{% load preferences_filters %}
 
 <!DOCTYPE html>
-<html>
+<html class="{% if request.user|get_preference:'dark_mode' %}dark-mode{% endif %}">
     <head>
         <meta charset="utf-8" />
         <title>
@@ -25,16 +26,17 @@
 
         {# Bootstrap #}
         <link href="{% static 'lib/bootstrap-5.3.3-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'lib/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css' %}" rel="stylesheet">
 
         {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/tetraprimecommunity.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/global.css' %}">
 
         {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
         {% endblock %}
     </head>
 
-    <body class="{% block body_class %}{% endblock %}">
+    <body class="{% block body_class %}{% endblock %} {% if request.user|get_preference:'dark_mode' %}dark-mode{% endif %}">
         {% wagtailuserbar %}
 
         {% block content %}{% endblock %}
@@ -43,7 +45,7 @@
         <script src="{% static 'lib/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js' %}"></script>
 
         {# Global javascript #}
-        <script type="text/javascript" src="{% static 'js/tetraprimecommunity.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/global.js' %}"></script>
 
         {% block extra_js %}
         {# Override this in templates to add extra javascript #}

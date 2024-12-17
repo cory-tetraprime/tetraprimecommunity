@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% load preferences_filters %}
 
-{% block body_class %}{% endblock %}
+{% block body_class %}page-user-profile{% endblock %}
 
 {% block content %}
 
@@ -9,65 +10,255 @@
 
 <main class="container">
     <div class="row">
-        <div id="profile--banner">
-            <img src="">
-        </div>
+        {% include 'accounts/includes/profile-banner.html' %}
     </div>
     <div class="row mt-3">
-        <div class="col col-md-3 p-4">
+        <!--<div class="col col-md-3 p-4">
+            {% comment %}
             {% include 'accounts/includes/profile-nav-left.html' %}
-        </div>
-        <div class="col p-4 d-flex flex-column align-items-center">
-            {% if user.profile_picture %}
-            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" width="100" class="profile-picture">
-            {% endif %}
-
-            <h2 class="profile--title mt-2">{{ user.first_name }} {{ user.last_name }}</h2>
-            <!--<p>{{ user.email }}</p>-->
-
-            {% if user.is_staff %}
-            <p><strong>TPC Staff</strong></p>
-            {% endif %}
-
-            <p><span id="user--info-datejoined">Joined</span> {{ user.date_joined|date:"m/d/Y" }}</p>
-
-            {% if user.country %}
-            <p><em>{{ user.country }}</em></p>
-            {% endif %}
-
-            <p><span id="user--info-cookies">0</span> Cookies</p>
-            <p><span id="user--info-connects">0</span> Connections</p>
-
-            <div class="actions">
+            {% endcomment %}
+        </div>-->
+        <div class="col p-4 px-5 pt-0 d-flex flex-column position-relative">
+            <div id="profile--action-bar" class="row d-flex flex-row fs-5 w-100">
                 {% if user == request.user %}
-                <!--                <a href="/accounts/edit-profile/">Edit Profile</a>-->
-                <!--                <a href="{% url 'profile_settings' %}">Preferences</a>-->
-                <!--                <br>-->
-                <!--                <form method="post" action="{% url 'logout' %}" style="display: inline-block;">-->
-                <!--                    {% csrf_token %}-->
-                <!--                    <button type="submit">Logout</button>-->
-                <!--                </form>-->
+                <div class="col-auto"><span id="user--info-cookies">1</span> <i class="bi bi-cookie" title="Cookies"></i></div>
                 {% endif %}
-
+                <div class="col-auto"><span id="user--info-connects">0</span> <i class="bi bi-people-fill" title="Connections"></i></div>
+                <div class="col d-flex justify-content-end">
+                    {% if user|get_preference:"private_profile" != True %}
+                    <a href="https://tetraprime.community/accounts/profile/@{{ user.username }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-share" title="Share Profile"></i></a>
+                    {% else %}
+                    <a href="javascript:void(0);" class="btn btn-dark btn-sm"><i class="bi bi-eye-slash" title="Private Profile"></i></a>
+                    {% endif %}
+                </div>
                 {% if user != request.user %}
-                <a href="#follow">Connect</a>
+                <div class="col-auto d-flex justify-content-end">
+                    <a href="#follow" class="btn btn-outline-primary btn-sm"><i class="bi bi-people-fill" title="Connections"></i> Connect</a>
+                </div>
                 {% endif %}
             </div>
+
+            {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture top-0 mb-2 mx-auto"> <!--position-absolute-->
+            {% else %}
+            <img src="{{ GENERIC_USER_PFP }}" alt="Profile Picture" class="profile-picture top-0 mb-2 mx-auto"> <!--position-absolute-->
+            {% endif %}
+
+            <h1 class="profile--title text-center">{{ user.first_name }} {{ user.last_name }}</h1>
+
+            <p class="fs-5 cursor-pointer text-center" style="cursor: pointer;" title="Joined {{ user.date_joined|date:'m/d/Y' }}">
+                {{ user.username }} <i class="bi bi-person-vcard mx-1"></i> {% if user.is_staff %}TPC Staff{% endif %}
+            </p>
+
+            {% if user|get_preference:"bio_intro" %}
+            <div id="profile--bio-intro" class="mx-auto mb-4 text-center" style="max-width: 80%;">{{ user|get_preference:"bio_intro"|linebreaks }}</div>
+            {% endif %}
+
+            {% if user == request.user %}
+                {% if user|get_preference:"onboarding" != False %}
+                    {% include 'accounts/includes/onboard-new-user.html' %}
+                {% endif %}
+            {% endif %}
+
+
+            <div id="user--accordion-about" class="accordion mb-5 mx-auto w-100" style="max-width: 80%;">
+                {% if user|get_preference:'bio_current_professional_title' or user|get_preference:'bio_top_technical_skills' or user|get_preference:'bio_relevant_certifications' or user|get_preference:'bio_favorite_tools_and_technologies' %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="professional-overview">
+                        <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <span class="fs-4 mb-0 fw-normal"><i class="bi bi-person-lines-fill me-1 color-blueviolet"></i> Professional Overview</span>
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="professional-overview" data-bs-parent="#user--accordion-about">
+                        <div class="accordion-body">
+                            {% if user|get_preference:'bio_current_professional_title' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-blueviolet">Professional Title</h3>
+                                {{ user|get_preference:'bio_current_professional_title'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_top_technical_skills' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-blueviolet">Top Technical Skills</h3>
+                                {{ user|get_preference:'bio_top_technical_skills'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_relevant_certifications' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-blueviolet">Relevant Certifications</h3>
+                                {{ user|get_preference:'bio_relevant_certifications'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_favorite_tools_and_technologies' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-blueviolet">Favorite Tools & Technologies</h3>
+                                {{ user|get_preference:'bio_favorite_tools_and_technologies'|linebreaks }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if user|get_preference:'bio_career_goals' or user|get_preference:'bio_areas_for_growth' or user|get_preference:'bio_dream_project' or user|get_preference:'bio_projects_youre_proud_of' %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="aspirations-projects">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <span class="fs-4 mb-0 fw-normal"><i class="bi bi-ui-checks-grid me-1 color-lightcoral"></i> Aspirations & Projects</span>
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="aspirations-projects" data-bs-parent="#user--accordion-about">
+                        <div class="accordion-body">
+                            {% if user|get_preference:'bio_career_goals' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-lightcoral">Career Goals</h3>
+                                {{ user|get_preference:'bio_career_goals'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_areas_for_growth' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-lightcoral">Areas For Growth</h3>
+                                {{ user|get_preference:'bio_areas_for_growth'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_dream_project' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-lightcoral">Dream Project</h3>
+                                {{ user|get_preference:'bio_dream_project'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_projects_youre_proud_of' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-lightcoral">Projects You're Proud Of</h3>
+                                {{ user|get_preference:'bio_projects_youre_proud_of'|linebreaks }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if user|get_preference:'bio_open_for_collaboration_on' or user|get_preference:'bio_seeking_a_mentor' or user|get_preference:'bio_open_to_mentoring_others' or user|get_preference:'bio_need_help_with' %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="collaboration-teams">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            <span class="fs-4 mb-0 fw-normal"><i class="bi bi-people-fill me-1 color-mediumseagreen"></i> Collaboration & Teams</span>
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="collaboration-teams" data-bs-parent="#user--accordion-about">
+                        <div class="accordion-body">
+                            {% if user|get_preference:'bio_open_for_collaboration_on' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-mediumseagreen">Open For Collaboration On</h3>
+                                {{ user|get_preference:'bio_open_for_collaboration_on'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_seeking_a_mentor' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-mediumseagreen">Seeking A Mentor</h3>
+                                {{ user|get_preference:'bio_seeking_a_mentor'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_open_to_mentoring_others' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-mediumseagreen">Open To Mentoring Others</h3>
+                                {{ user|get_preference:'bio_open_to_mentoring_others'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_need_help_with' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-mediumseagreen">Need Help With</h3>
+                                {{ user|get_preference:'bio_need_help_with'|linebreaks }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if user|get_preference:'bio_favorite_quote' or user|get_preference:'bio_superpower' or user|get_preference:'bio_first_experience_in_tech' or user|get_preference:'bio_hobbies_and_passions' %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="personality-interests">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            <span class="fs-4 mb-0 fw-normal"><i class="bi bi-stars me-1 color-dodgerblue"></i> Personality & Interests</span>
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="personality-interests" data-bs-parent="#user--accordion-about">
+                        <div class="accordion-body">
+                            {% if user|get_preference:'bio_favorite_quote' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-dodgerblue">Favorite Quote</h3>
+                                {{ user|get_preference:'bio_favorite_quote'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_superpower' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-dodgerblue">Super Power</h3>
+                                {{ user|get_preference:'bio_superpower'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_first_experience_in_tech' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-dodgerblue">First Experience In Tech</h3>
+                                {{ user|get_preference:'bio_first_experience_in_tech'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_hobbies_and_passions' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-dodgerblue">Hobbies & Passions</h3>
+                                {{ user|get_preference:'bio_hobbies_and_passions'|linebreaks }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div id="feature-activity-feed" class="mt-5"></div>
         </div>
-        <div class="col col-md-3 p-4">
+        <!--<div class="col col-md-3 p-4">
             <div class="row">
                 <div class="d-flex align-items-center">
-                    <input id="field--whatsnew" class="form-control me-2" type="text"
-                           placeholder="What are you curious about?">
+                    <input id="field&#45;&#45;whatsnew" class="form-control me-2" type="text" placeholder="What are you curious about?">
                     <button class="btn btn-outline-secondary" type="submit">&gt;</button>
                 </div>
             </div>
             <hr>
-            <h2>For You</h2>
             <div>
                 <p>Coming soon...</p>
             </div>
-        </div>
+        </div>-->
     </div>
+
+    {% if messages %}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        {% for message in messages %}
+        <div id="myToast" class="toast fs-6 align-items-center text-white bg-{{ message.tags }} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+<!--          <div class="toast-header">-->
+<!--            -->
+<!--            <strong class="me-auto">Notification</strong>-->
+<!--            <small>Nice one!</small>-->
+<!--            -->
+<!--          </div>-->
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-bell-fill me-2"></i> {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close Notification" title="Close"></button>
+            </div>
+        </div>
+        {% endfor %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var toastEl = document.getElementById('myToast');
+
+                // Initialize the toast
+                var myToast = new bootstrap.Toast(toastEl);
+                myToast.show();
+            });
+        </script>
+    </div>
+    {% endif %}
 </main>
 {% endblock %}

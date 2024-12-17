@@ -81,6 +81,8 @@
 
     #profile--banner {
         background-color: #5f9996;
+        background-size: cover;
+        background-position: center;
         height: 240px;
     }
 

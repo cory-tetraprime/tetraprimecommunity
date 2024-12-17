@@ -16,8 +16,22 @@ class CustomUserAdmin(UserAdmin):
 
     # To display custom fields in the admin form
     fieldsets = UserAdmin.fieldsets + (
-        ('Custom User Info', {'fields': ('country', 'profile_picture')}),
+        ('Custom User Info', {'fields': ('country', 'profile_picture', 'preferences')}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
-        ('Custom User Info', {'fields': ('country', 'profile_picture')}),
+        ('Custom User Info', {'fields': ('country', 'profile_picture', 'preferences')}),
     )
+
+
+# from django.contrib import admin
+# from django.contrib.auth.admin import UserAdmin
+# from .models import CustomUser
+#
+# class CustomUserAdmin(UserAdmin):
+#     model = CustomUser
+#     fieldsets = UserAdmin.fieldsets + (
+#         (None, {"fields": ("country", "profile_picture", "preferences")}),
+#     )
+#     list_display = ["username", "email", "country", "is_staff"]
+#
+# admin.site.register(CustomUser, CustomUserAdmin)

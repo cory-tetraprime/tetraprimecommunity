@@ -10,46 +10,98 @@ User = get_user_model()
 
 
 class CustomUserEditForm(UserEditForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}), label=_("Email"), required=True)
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label=_("First Name"), required=True)
-    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label=_("Last Name"), required=True)
-    # password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label="Password")
-    # password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label="Confirm Password")
-    country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, label=_("Country"))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'rows': 3}), label=_("Email"), required=True)
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), label=_("First Name"), required=True)
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), label=_("Last Name"), required=True)
+    country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), required=True, label=_("Country"))
     profile_picture = forms.ImageField(required=False)
+    banner_image = forms.ImageField(required=False)
+    bio_intro = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Bio Intro"), max_length=500, required=False)
+    bio_current_professional_title = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Current Professional Title"), max_length=500, required=False)
+    bio_top_technical_skills = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Top Technical Skills"), max_length=500, required=False)
+    bio_relevant_certifications = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Relevant Certifications"), max_length=500, required=False)
+    bio_favorite_tools_and_technologies = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Favorite Tools & Technologies"), max_length=500, required=False)
+    bio_career_goals = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Career Goals"), max_length=500, required=False)
+    bio_dream_project = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Dream Project"), max_length=500, required=False)
+    bio_projects_youre_proud_of = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Projects You're Proud Of"), max_length=500, required=False)
+    bio_areas_for_growth = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Areas for Growth"), max_length=500, required=False)
+    bio_open_for_collaboration_on = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Open for Collaboration On"), max_length=500, required=False)
+    bio_seeking_a_mentor = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Seeking a Mentor"), max_length=500, required=False)
+    bio_open_to_mentoring_others = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Open to Mentoring Others"), max_length=500, required=False)
+    bio_need_help_with = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Need Help With"), max_length=500, required=False)
+    bio_favorite_quote = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Favorite Quote"), max_length=500, required=False)
+    bio_superpower = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Superpower"), max_length=500, required=False)
+    bio_first_experience_in_tech = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("First Experience in Tech"), max_length=500, required=False)
+    bio_hobbies_and_passions = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Hobbies & Passions"), max_length=500, required=False)
 
     class Meta(UserEditForm.Meta):
         model = User
-        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'country', 'profile_picture']  # Add fields you want to edit
+        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'country', 'profile_picture', 'banner_image']  # Add fields you want to edit
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Pre-fill the form with existing bio_intro from preferences
+        instance = kwargs.get('instance')
+        if instance:
+            self.fields['bio_intro'].initial = instance.preferences.get('bio_intro', '')
+            self.fields['bio_current_professional_title'].initial = instance.preferences.get('bio_current_professional_title', '')
+            self.fields['bio_top_technical_skills'].initial = instance.preferences.get('bio_top_technical_skills', '')
+            self.fields['bio_relevant_certifications'].initial = instance.preferences.get('bio_relevant_certifications', '')
+            self.fields['bio_favorite_tools_and_technologies'].initial = instance.preferences.get('bio_favorite_tools_and_technologies', '')
+            self.fields['bio_career_goals'].initial = instance.preferences.get('bio_career_goals', '')
+            self.fields['bio_dream_project'].initial = instance.preferences.get('bio_dream_project', '')
+            self.fields['bio_projects_youre_proud_of'].initial = instance.preferences.get('bio_projects_youre_proud_of', '')
+            self.fields['bio_areas_for_growth'].initial = instance.preferences.get('bio_areas_for_growth', '')
+            self.fields['bio_open_for_collaboration_on'].initial = instance.preferences.get('bio_open_for_collaboration_on', '')
+            self.fields['bio_seeking_a_mentor'].initial = instance.preferences.get('bio_seeking_a_mentor', '')
+            self.fields['bio_open_to_mentoring_others'].initial = instance.preferences.get('bio_open_to_mentoring_others', '')
+            self.fields['bio_need_help_with'].initial = instance.preferences.get('bio_need_help_with', '')
+            self.fields['bio_favorite_quote'].initial = instance.preferences.get('bio_favorite_quote', '')
+            self.fields['bio_superpower'].initial = instance.preferences.get('bio_superpower', '')
+            self.fields['bio_first_experience_in_tech'].initial = instance.preferences.get('bio_first_experience_in_tech', '')
+            self.fields['bio_hobbies_and_passions'].initial = instance.preferences.get('bio_hobbies_and_passions', '')
+
     def save(self, commit=True):
         instance = super().save(commit=False)  # Don't save yet, to inspect data
-        if self.cleaned_data.get('profile_picture'):
-            uploaded_file = self.cleaned_data['profile_picture']
-            print(f"File Name: {uploaded_file.name}")
-            print(f"File Size: {uploaded_file.size} bytes")
+
+        # if self.cleaned_data.get('profile_picture'):
+        #     uploaded_file = self.cleaned_data['profile_picture']
+
+        # if self.cleaned_data.get('banner_image'):
+        #     uploaded_file = self.cleaned_data['banner_image']
+
+        if self.cleaned_data.get('bio_intro'):
+            # if form.is_valid():
+            preferences = instance.preferences or {}  # Ensure it's a dictionary
+            for field_name, value in self.cleaned_data.items():
+                if field_name.startswith('bio_') and value is not None:  # Check for 'bio_' prefix and non-empty values
+                    preferences[field_name] = value.strip() if isinstance(value, str) else value  # Handle strings
+            instance.preferences = preferences  # Reassign explicitly
+
         if commit:
             instance.save()
         return instance
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}), label=_("Email"), required=True)
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label=_("First Name"), required=True)
-    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), label=_("Last Name"), required=True)
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label="Password")
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), label="Confirm Password")
-    country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, label=_("Country"))
-    profile_picture = forms.ImageField(required=False)
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'rows': 3}), label=_("Email"), required=True)
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), label=_("First Name"), required=True)
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), label=_("Last Name"), required=True)
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'rows': 3}), label="Password")
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'rows': 3}), label="Confirm Password")
+    country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), required=True, label=_("Country"))
+    # profile_picture = forms.ImageField(required=False)
+    # banner_image = forms.ImageField(required=False)
+    bio_intro = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Bio Intro"), max_length=500, required=False)
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'country', 'profile_picture']
+        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'country']
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control', 'rows': 3}),
         }
 
     def clean_email(self):

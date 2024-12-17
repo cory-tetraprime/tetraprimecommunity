@@ -1,8 +1,19 @@
-<form method="post">
+<form method="post" action="{% url 'user_preferences' %}">
     {% csrf_token %}
     <label>
-        <input type="checkbox" name="dark_mode" {% if dark_mode %}checked{% endif %}>
-        Enable Dark Mode
+        Dark Mode:
+        <input type="checkbox" name="dark_mode" {% if user|get_preference:'dark_mode' %}checked{% endif %}>
     </label>
-    <button type="submit">Save</button>
+    <label>
+        Email Notifications:
+        <input type="checkbox" name="email_notifications" {% if user|get_preference:'email_notifications' %}checked{% endif %}>
+    </label>
+    <label>
+        Language:
+        <select name="language">
+            <option value="en" {% if user.get_preference('language') == 'en' %}selected{% endif %}>English</option>
+            <option value="es" {% if user.get_preference('language') == 'es' %}selected{% endif %}>Spanish</option>
+        </select>
+    </label>
+    <button type="submit">Save Preferences</button>
 </form>

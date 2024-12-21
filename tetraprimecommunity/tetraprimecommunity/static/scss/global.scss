@@ -323,7 +323,7 @@ body.dark-mode {
 
     &.page-edit-profile {
 
-        .form-control {
+        .form-control, .form-select {
             background-color: #222;
             border-color: #444;
             color: #e0e0e0;

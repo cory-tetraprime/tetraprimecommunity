@@ -1,16 +1,16 @@
 {% load static %}
 <header class="p-3 mb-3 m-auto">
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+        <div class="d-flex flex-wrap align-items-center">
+            <a href="/social/people/" class="d-flex align-items-center mb-2 mb-lg-0 me-auto me-md-0 link-body-emphasis text-decoration-none">
                 <img class="header--logo-40" src="{% static 'img/TPC Logo  --v1 --200px.png' %}" loading="lazy">
             </a>
 
-            <ul class="nav col-12 col-lg-auto ms-2 me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li class="me-5"><strong>Tetra Prime Community</strong></li>
-                <li><a href="{% url 'profile' %}" class="px-3">Your Profile</a></li>
-                <li><a href="{% url 'people' %}" class="px-3">Discover</a></li>
-                <!--<li><a href="{% url 'groups' %}" class="px-3">Projects</a></li>-->
+            <ul class="nav col-12 col-lg-auto ms-md-2 me-lg-auto mb-2 mb-md-0 justify-content-center d-none d-md-flex">
+                <li class="me-md-5 text-center"><strong>Tetra Prime Community</strong></li>
+                <li><a href="{% url 'profile' %}" class="pe-5"><i class="bi bi-person-vcard me-1"></i> Your Profile</a></li>
+                <li><a href="{% url 'people' %}" class="pe-5"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
+                <li><a href="{% url 'tpc_whats_new' %}" class="pe-0"><i class="bi bi-newspaper me-1"></i> What's New</a></li>
             </ul>
 
             <!--<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
@@ -23,18 +23,17 @@
                     {% if request.user.profile_picture %}
                     <img src="{{ request.user.profile_picture.url }}" alt="mdo" width="32" height="32" class="rounded-3">
                     {% else %}
-                    <img src="{{ GENERIC_USER_PFP }}" alt="mdo" width="32" height="32" class="rounded-3">
+                    <img src="{% static 'custom/images/user-pfp-generic.png' %}" alt="mdo" width="32" height="32" class="rounded-3">
                     {% endif %}
                 </a>
                 <ul class="header--userdropdown dropdown-menu text-small" style="">
-                    <li><a class="dropdown-item" href="{% url 'profile' %}">Your Profile</a></li>
-                    <li><a class="dropdown-item" href="{% url 'people' %}">Discover</a></li>
-                    <!--<li><a class="dropdown-item" href="{% url 'groups' %}">Projects</a></li>-->
-                    <!--<li><a class="dropdown-item disabled" href="#myprojects">Projects</a></li>-->
+                    <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i> Your Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'people' %}"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
+                    <li><a class="dropdown-item" href="{% url 'tpc_whats_new' %}"><i class="bi bi-newspaper me-1"></i> What's New</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="bi bi-pencil-square me-1"></i> Edit Profile</a></li>
                     <!--<li><a class="dropdown-item disabled" href="#helpcenter">Help Center</a></li>-->
                     <li>
                         <hr class="dropdown-divider">
@@ -42,7 +41,7 @@
                     <li><!--<a class="dropdown-item disabled" href="#">Log out</a>-->
                         <form method="post" action="{% url 'logout' %}" style="display: block;">
                             {% csrf_token %}
-                            <button class="dropdown-item" type="submit">Logout</button>
+                            <button class="dropdown-item" type="submit"><i class="bi bi-box-arrow-right me-1"></i> Logout</button>
                         </form>
                     </li>
                 </ul>

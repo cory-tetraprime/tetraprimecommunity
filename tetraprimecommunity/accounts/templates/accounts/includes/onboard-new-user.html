@@ -6,10 +6,10 @@
             {% if not profile_status.incomplete_groups %}
             <h2 class="fs-3 text-center"><i class="bi bi-star color-gold"></i> Congrats!</h2>
             <p class="text-center fw-bold">Thank you for completing your profile!</p>
-            <p class="text-center px-2 mb-4">Doing this fosters meaningful connections, showcases your skills & interests, and helps others collaborate with or support you, ultimately strengthening the community's sense of belonging and shared purpose.</p>
+            <p class="text-center px-2 mb-4">The community is stronger thanks to you!</p>
             {% else %}
-            <h2 class="fs-4 text-center">Community Profile Strength</h2>
-            <p class="text-center">Finish to collect 4 cookies.</p>
+            <h2 class="fs-4 text-center mb-2"><i class="bi bi-graph-up-arrow me-1 fs-5"></i> Community Profile Strength</h2>
+            <p class="text-center mb-4">Doing this fosters meaningful connections, showcases your skills & interests, and helps others collaborate with you, ultimately strengthening the whole community.</p>
             {% endif %}
 
             <div class="progress mt-3">
@@ -19,12 +19,12 @@
 
                 {% for group in profile_status.completed_groups %}
                 <li class="list-group-item row-collapsed d-flex">
-                    <div class="col-9">
+                    <div class="col-12">
                         <i class="bi bi-check-circle-fill me-1"></i> {{ group }}
                     </div>
-                    <div class="col-3 text-end">
+                    <!--<div class="col-3 text-end">
                         <span>+1 <i class="bi bi-cookie" title="Cookies"></i></span>
-                    </div>
+                    </div>-->
                 </li>
                 {% endfor %}
 

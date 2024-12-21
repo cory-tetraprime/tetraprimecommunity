@@ -20,13 +20,15 @@
             {% include 'accounts/includes/profile-nav-left.html' %}
             {% endcomment %}
         </div>-->
-        <div class="col p-4 px-5 pt-0 d-flex flex-column position-relative">
+        <div class="col px-3 px-md-5 pt-0 d-flex flex-column position-relative">
             <div id="profile--action-bar" class="row d-flex flex-row fs-5 w-100">
-                <div class="col-auto"><span id="user--info-cookies">1</span> <i class="bi bi-cookie" title="Cookies"></i></div>
-                <div class="col-auto"><span id="user--info-connects">0</span> <i class="bi bi-people-fill" title="Connections"></i></div>
+                {% if user == request.user %}
+                <!--<div class="col-auto"><span id="user&#45;&#45;info-cookies">1</span> <i class="bi bi-cookie" title="Cookies"></i></div>-->
+                {% endif %}
+                <!--<div class="col-auto"><span id="user&#45;&#45;info-connects">0</span> <i class="bi bi-people-fill" title="Connections"></i></div>-->
                 <div class="col d-flex justify-content-center">
                     {% if user|get_preference:"private_profile" != True %}
-                    <a href="https://tetraprime.community/accounts/profile/@{{ user.username }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-share" title="Share Profile"></i></a>
+                    <!--<a href="https://tetraprime.community/accounts/profile/@{{ user.username }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-share" title="Share Profile"></i></a>-->
                     {% else %}
                     <a href="javascript:void(0);" class="btn btn-dark btn-sm"><i class="bi bi-eye-slash" title="Private Profile"></i></a>
                     {% endif %}
@@ -39,9 +41,9 @@
             </div>
 
             {% if profile_user.profile_picture %}
-            <img src="{{ profile_user.profile_picture.url }}" alt="Profile Picture" width="100" class="profile-picture align-self-center mb-4">
+            <img src="{{ profile_user.profile_picture.url }}" alt="Profile Picture" width="100" class="profile-picture align-self-center mb-5">
             {% else %}
-            <img src="{{ GENERIC_USER_PFP }}" alt="Profile Picture" class="profile-picture align-self-center mb-4">
+            <img src="{% static 'custom/images/user-pfp-generic.png' %}" alt="Profile Picture" class="profile-picture align-self-center mb-5">
             {% endif %}
 <!--            <h1 class="text-center mb-4">Edit Profile</h1>-->
             <h1 class="fs-2 mb-4 text-center"><i class="bi bi-person-vcard"></i> Profile Basics</h1>
@@ -50,36 +52,51 @@
                 {{ form.non_field_errors }}
                 <div class="row">
                     <div class="col-md-6 mb-5">
-                        <label for="id_username" class="form-label">Display Name</label>
+                        <label for="id_username" class="form-label">Display Name*</label>
                         {{ form.username }}
                         {{ form.username.errors }}
                     </div>
                     <div class="col-md-6 mb-5">
-                        <label for="id_email" class="form-label">Email</label>
+                        <label for="id_email" class="form-label">Email*</label>
                         {{ form.email }}
                         {{ form.email.errors }}
                     </div>
                     <div class="col-md-6 mb-5">
-                        <label for="id_first_name" class="form-label">First Name</label>
+                        <label for="id_first_name" class="form-label">First Name*</label>
                         {{ form.first_name }}
                         {{ form.first_name.errors }}
                     </div>
                     <div class="col-md-6 mb-5">
-                        <label for="id_last_name" class="form-label">Last Name</label>
+                        <label for="id_last_name" class="form-label">Last Name*</label>
                         {{ form.last_name }}
                         {{ form.last_name.errors }}
                     </div>
                     <div class="col-md-6 mb-5">
-                        <label for="id_country" class="form-label">Country</label>
+                        <label for="id_country" class="form-label">Country*</label>
                         {{ form.country }}
                         {{ form.country.errors }}
                     </div>
                     <div class="col-12 mb-5">
-                        <label for="id_bio_intro" class="form-label">Profile Bio</label>
+                        <label for="id_bio_intro" class="form-label">Profile Bio <span class="fw-normal fs-6"><em>(<span id="bio_intro_counter">500</span> characters remaining)</em></span></label>
                         {{ form.bio_intro }}
                         {{ form.bio_intro.errors }}
                     </div>
-                    <div class="col-4 mb-5">
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const bioIntroField = document.getElementById('id_bio_intro'); // Adjust the ID to match your form field
+                            const counter = document.getElementById('bio_intro_counter');
+                            const maxLength = 500; // Set the maximum character length
+                            function updateCharacterCount() {
+                                const remaining = maxLength - bioIntroField.value.length;
+                                counter.textContent = `${remaining}`;
+                            }
+                            if (bioIntroField) {
+                                updateCharacterCount();
+                                bioIntroField.addEventListener('input', updateCharacterCount);
+                            }
+                        });
+                    </script>
+                    <div class="col-md-4 mb-5">
                         <h2 class="form-label fs-3">Profile Picture</h2>
                         <div class="mt-1 mb-2">
                         {% if profile_user.profile_picture %}
@@ -111,7 +128,7 @@
                             <div style="background-color: #999; border-radius: 50%; height: 50px; width: 50px;"></div>
                         </div>-->
                     </div>
-                    <div class="col-6 offset-md-2 mb-5">
+                    <div class="col-md-6 offset-md-2 mb-5">
                         <h2 class="form-label fs-3">Profile Banner</h2>
                         <div class="mt-1 mb-2">
                         {% if user.banner_image %}
@@ -345,12 +362,6 @@
                 <div class="row fs-5">
                     <div class="col-12 mb-4">
                         <label class="fw-normal">
-                            <span class="me-3 fw-bold">Private Profile</span>
-                            <input type="checkbox" name="private_profile" {% if user|get_preference:"private_profile" == True %}checked{% endif %}> Enable
-                        </label>
-                    </div>
-                    <div class="col-12 mb-4">
-                        <label class="fw-normal">
                             <span class="me-3 fw-bold">Onboarding</span>
                             {% if user|get_preference:"onboarding_complete" != False %}
                             <span class="fs-6"><em>(Complete: {{ user|get_preference:"onboarding_complete" }})</em></span>
@@ -364,6 +375,13 @@
                             <span class="me-3 fw-bold">Dark Mode</span>
                             <input type="checkbox" name="dark_mode" {% if user|get_preference:"dark_mode" %}checked{% endif %}> Enable
                         </label>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <label class="fw-normal">
+                            <span class="me-3 fw-bold">Private Profile</span>
+                            <input type="checkbox" name="private_profile" {% if user|get_preference:"private_profile" == True %}checked{% endif %}> Enable
+                        </label>
+                        <p class="fs-6"><em>Note, your profile will be hidden from discovery and search.</em></p>
                     </div>
                     <!--<div class="col-12 mb-4">
                         <label class="fw-normal">

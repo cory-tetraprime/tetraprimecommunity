@@ -4,4 +4,6 @@ from . import views
 urlpatterns = [
     path('people/', views.people_view, name='people'),
     path('groups/', views.groups_view, name='groups'),
+    path('whats-new/', views.tpc_whats_new, name='tpc_whats_new'),
+    path('whats-new/release-notes/', views.tpc_whats_new_release_notes, name='tpc_whats_new_release_notes'),
 ]

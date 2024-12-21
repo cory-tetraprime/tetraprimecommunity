@@ -24,3 +24,11 @@ def people_view(request):
 
 def groups_view(request):
     return render(request, 'social/groups.html', {'user': request.user})
+
+
+def tpc_whats_new(request):
+    return render(request, 'social/whats-new.html', {'user': request.user})
+
+
+def tpc_whats_new_release_notes(request):
+    return render(request, 'social/release-notes.html', {'user': request.user})

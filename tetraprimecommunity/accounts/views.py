@@ -25,7 +25,7 @@ def signup_view(request):
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            messages.success(request, 'You may now sign-in! You have 24 hours to confirm your email.')
+            messages.success(request, 'You may now sign-in!')
             return redirect('login')
     else:
         form = CustomUserCreationForm()

@@ -18,33 +18,35 @@
             {% include 'accounts/includes/profile-nav-left.html' %}
             {% endcomment %}
         </div>-->
-        <div class="col p-4 px-5 pt-0 d-flex flex-column position-relative">
+        <div class="col px-3 px-md-5 pt-0 d-flex flex-column position-relative">
             <div id="profile--action-bar" class="row d-flex flex-row fs-5 w-100">
                 {% if user == request.user %}
-                <div class="col-auto"><span id="user--info-cookies">1</span> <i class="bi bi-cookie" title="Cookies"></i></div>
+                <!--<div class="col-auto"><span id="user&#45;&#45;info-cookies">1</span> <i class="bi bi-cookie" title="Cookies"></i></div>-->
                 {% endif %}
-                <div class="col-auto"><span id="user--info-connects">0</span> <i class="bi bi-people-fill" title="Connections"></i></div>
+                <!--<div class="col-auto"><span id="user&#45;&#45;info-connects">0</span> <i class="bi bi-people-fill" title="Connections"></i></div>-->
                 <div class="col d-flex justify-content-end">
                     {% if user|get_preference:"private_profile" != True %}
-                    <a href="https://tetraprime.community/accounts/profile/@{{ user.username }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-share" title="Share Profile"></i></a>
+                    <!--<a href="https://tetraprime.community/accounts/profile/@{{ user.username }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-share" title="Share Profile"></i></a>-->
                     {% else %}
                     <a href="javascript:void(0);" class="btn btn-dark btn-sm"><i class="bi bi-eye-slash" title="Private Profile"></i></a>
                     {% endif %}
                 </div>
                 {% if user != request.user %}
-                <div class="col-auto d-flex justify-content-end">
+                <!--<div class="col-auto d-flex justify-content-end">
                     <a href="#follow" class="btn btn-outline-primary btn-sm"><i class="bi bi-people-fill" title="Connections"></i> Connect</a>
-                </div>
+                </div>-->
                 {% endif %}
             </div>
 
             {% if user.profile_picture %}
-            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture top-0 mb-2 mx-auto"> <!--position-absolute-->
+            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture top-0 mb-3 mx-auto"> <!--position-absolute-->
             {% else %}
-            <img src="{{ GENERIC_USER_PFP }}" alt="Profile Picture" class="profile-picture top-0 mb-2 mx-auto"> <!--position-absolute-->
+            <img src="{% static 'custom/images/user-pfp-generic.png' %}" alt="Profile Picture" class="profile-picture top-0 mb-3 mx-auto"> <!--position-absolute-->
             {% endif %}
 
+            {% if user.first_name and user.last_name %}
             <h1 class="profile--title text-center">{{ user.first_name }} {{ user.last_name }}</h1>
+            {% endif %}
 
             <p class="fs-5 cursor-pointer text-center" style="cursor: pointer;" title="Joined {{ user.date_joined|date:'m/d/Y' }}">
                 {{ user.username }} <i class="bi bi-person-vcard mx-1"></i> {% if user.is_staff %}TPC Staff{% endif %}
@@ -61,7 +63,7 @@
             {% endif %}
 
 
-            <div id="user--accordion-about" class="accordion mb-5 mx-auto w-100" style="max-width: 80%;">
+            <div id="user--accordion-about" class="accordion col-12 col-md-9 mx-auto mb-5">
                 {% if user|get_preference:'bio_current_professional_title' or user|get_preference:'bio_top_technical_skills' or user|get_preference:'bio_relevant_certifications' or user|get_preference:'bio_favorite_tools_and_technologies' %}
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="professional-overview">

@@ -10,6 +10,7 @@
             <h1 class="mt-2 mb-4"><img src="{% static 'img/TPC_Logo__--v1_--1K.original.png' %}" loading="lazy" width="50px" class="float-start me-2">Join Our Community</h1>
             <form method="post" enctype="multipart/form-data" class="fs-5">
                 {% csrf_token %}
+                {{ form.non_field_errors }}
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <label for="id_username" class="form-label">Username</label>
@@ -48,6 +49,11 @@
                         <label for="id_password2" class="form-label">Confirm Password</label>
                         {{ form.password2 }}
                         {{ form.password2.errors }}
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label for="id_invite_code" class="form-label">Invite Code</label>
+                        {{ form.invite_code }}
+                        {{ form.invite_code.errors }}
                     </div>
                 </div>
 

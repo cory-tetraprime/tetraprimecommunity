@@ -13,10 +13,22 @@ class CustomUserEditForm(UserEditForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'rows': 3}), label=_("Email"), required=True)
     first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), label=_("First Name"), required=True)
     last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), label=_("Last Name"), required=True)
-    country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), required=True, label=_("Country"))
+    COUNTRY_CHOICES = [
+        ('', 'Select your country'),  # Default blank option
+        ('US', 'United States'),
+        ('CA', 'Canada'),
+        ('00', 'Other'),
+    ]
+    country = forms.ChoiceField(
+        choices=COUNTRY_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+        label=_("Country")
+    )
+    # country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), required=True, label=_("Country"))
     profile_picture = forms.ImageField(required=False)
     banner_image = forms.ImageField(required=False)
-    bio_intro = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Bio Intro"), max_length=500, required=False)
+    bio_intro = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}), label=_("Bio Intro"), max_length=500, required=False)
     bio_current_professional_title = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Current Professional Title"), max_length=500, required=False)
     bio_top_technical_skills = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Top Technical Skills"), max_length=500, required=False)
     bio_relevant_certifications = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Relevant Certifications"), max_length=500, required=False)
@@ -87,21 +99,32 @@ class CustomUserEditForm(UserEditForm):
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'rows': 3}), label=_("Email"), required=True)
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), label=_("First Name"), required=True)
-    last_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), label=_("Last Name"), required=True)
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'rows': 3}), label="Password")
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'rows': 3}), label="Confirm Password")
-    country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), required=True, label=_("Country"))
-    # profile_picture = forms.ImageField(required=False)
-    # banner_image = forms.ImageField(required=False)
-    bio_intro = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Bio Intro"), max_length=500, required=False)
+    email = forms.EmailField(max_length=40, widget=forms.EmailInput(attrs={'class': 'form-control'}), label=_("Email"), required=True)
+    first_name = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}), label=_("First Name"), required=True)
+    last_name = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}), label=_("Last Name"), required=True)
+    password1 = forms.CharField(max_length=40, widget=forms.PasswordInput(attrs={'class': 'form-control'}), label="Password")
+    password2 = forms.CharField(max_length=40, widget=forms.PasswordInput(attrs={'class': 'form-control'}), label="Confirm Password")
+    COUNTRY_CHOICES = [
+        ('', 'Select your country'),  # Default blank option
+        ('US', 'United States'),
+        ('CA', 'Canada'),
+        ('00', 'Other'),
+    ]
+    country = forms.ChoiceField(
+        choices=COUNTRY_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+        label=_("Country"),
+        initial='US'
+    )
+    # country = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, label=_("Country"))
+    invite_code = forms.CharField(max_length=100, required=True, help_text="Enter your invite code.", widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'country']
         widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control', 'rows': 3}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def clean_email(self):
@@ -117,6 +140,15 @@ class CustomUserCreationForm(UserCreationForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Passwords don't match")
         return password2
+
+    def clean_invite_code(self):
+        invite_code = self.cleaned_data.get('invite_code')
+        correct_code = "Q7b!JSCCxqdvV%fV7L7oGi@6AAzsiE4F9R8FZBab"  # Replace with your hardcoded invite code
+
+        if invite_code != correct_code:
+            raise forms.ValidationError("Invalid invite code. Please try again.")
+
+        return invite_code
 
     def save(self, commit=True):
         user = super().save(commit=False)

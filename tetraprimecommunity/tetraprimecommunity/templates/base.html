@@ -11,7 +11,7 @@
             {% endblock %}
             {% block title_suffix %}
             {% wagtail_site as current_site %}
-            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
+            {% if current_site and current_site.site_name %} on {{ current_site.site_name }}{% endif %}
             {% endblock %}
         </title>
         {% if page.search_description %}

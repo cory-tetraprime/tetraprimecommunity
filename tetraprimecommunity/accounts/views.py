@@ -98,7 +98,7 @@ def edit_profile_view(request):
             user.preferences = preferences
             user.save()
             messages.success(request, 'Your profile has been saved.', 'success')
-            return redirect('edit_profile')  # Redirect to profile page after saving
+            return redirect('profile')  # Redirect to profile page after saving
         else:
             # Reload the user instance to discard invalid file uploads
             with transaction.atomic():

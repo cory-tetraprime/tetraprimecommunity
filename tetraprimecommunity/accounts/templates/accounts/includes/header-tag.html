@@ -1,16 +1,16 @@
 {% load static %}
-<header class="p-3 mb-3 m-auto">
+<header class="col-11 pt-3 mx-auto mb-4">
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center">
-            <a href="/social/people/" class="d-flex align-items-center mb-2 mb-lg-0 me-auto me-md-0 link-body-emphasis text-decoration-none">
+        <div class="d-flex align-items-center">
+            <a href="{% url 'profile' %}" title="Return to your profile" class="d-flex align-items-center me-2 mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
                 <img class="header--logo-40" src="{% static 'img/TPC Logo  --v1 --200px.png' %}" loading="lazy">
             </a>
 
-            <ul class="nav col-12 col-lg-auto ms-md-2 me-lg-auto mb-2 mb-md-0 justify-content-center d-none d-md-flex">
-                <li class="me-md-5 text-center"><strong>Tetra Prime Community</strong></li>
-                <li><a href="{% url 'profile' %}" class="pe-5"><i class="bi bi-person-vcard me-1"></i> Your Profile</a></li>
-                <li><a href="{% url 'people' %}" class="pe-5"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
-                <li><a href="{% url 'tpc_whats_new' %}" class="pe-0"><i class="bi bi-newspaper me-1"></i> What's New</a></li>
+            <ul class="nav col d-flex ms-md-2 me-lg-auto mb-2 mb-md-0">
+                <li class="me-md-5"><strong><span class="d-none d-lg-block">Tetra Prime Community</span><span class="d-block d-lg-none">TPC</span></strong></li>
+                <li class="d-none d-md-block"><a href="{% url 'profile' %}" class="pe-5"><i class="bi bi-person-vcard me-1"></i> Your Profile</a></li>
+                <li class="d-none d-md-block"><a href="{% url 'people' %}" class="pe-5"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
+                <li class="d-none d-md-block"><a href="{% url 'tpc_whats_new' %}" class="pe-0"><i class="bi bi-newspaper me-1"></i> What's New</a></li>
             </ul>
 
             <!--<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">

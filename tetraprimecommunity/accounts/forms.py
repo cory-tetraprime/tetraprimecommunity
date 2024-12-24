@@ -31,7 +31,7 @@ class CustomUserEditForm(UserEditForm):
     bio_intro = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}), label=_("Bio Intro"), max_length=500, required=False)
     bio_current_professional_title = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Current Professional Title"), max_length=500, required=False)
     bio_top_technical_skills = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Top Technical Skills"), max_length=500, required=False)
-    bio_relevant_certifications = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Relevant Certifications"), max_length=500, required=False)
+    bio_relevant_certifications = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Training and/or Certifications"), max_length=500, required=False)
     bio_favorite_tools_and_technologies = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Favorite Tools & Technologies"), max_length=500, required=False)
     bio_career_goals = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Career Goals"), max_length=500, required=False)
     bio_dream_project = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), label=_("Dream Project"), max_length=500, required=False)

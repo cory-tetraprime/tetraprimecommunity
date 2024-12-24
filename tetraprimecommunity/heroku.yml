@@ -1,6 +1,4 @@
 setup:
-  config:
-    DJANGO_SECRET_KEY: "@5m%lf9+mo+75_6^%+)5cnc#%18uo-15*z_gwa2+o*bee2r)1f"
   addons:
     - plan: heroku-postgresql
   build:

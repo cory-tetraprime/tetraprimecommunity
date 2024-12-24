@@ -1,22 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
+{% load preferences_filters %}
 
+{% block title %}Discover People{% endblock %}
 {% block body_class %}page-discover{% endblock %}
 
 {% block content %}
 
 {% include 'accounts/includes/header-tag.html' %}
 
-<main class="container">
-    <div class="row mt-3">
+<main class="col-11 mx-auto mt-md-3">
+    <div class="row">
         <!--<div class="col col-md-3 p-4">
             {% comment %}
             {% include 'accounts/includes/profile-nav-left.html' %}
             {% endcomment %}
         </div>-->
-        <div class="col p-4 px-5 d-flex flex-column mt-3">
-            <h1 class="text-center mb-3"><i class="bi bi-people-fill color-mediumseagreen"></i> Discover</h1>
-            <div class="row mb-4">
+        <div class="col p-4 px-md-5 d-flex flex-column mt-3">
+            <h1 class="text-center mb-5"><i class="bi bi-people-fill color-mediumseagreen"></i> Discover</h1>
+            <div class="row mb-4 px-2">
                 <div class="col-6 text-start"><em>{{ page_obj.object_list|length }} Community Members</em></div>
                 <div class="col-6 text-end"><em>Ordered by Date Joined</em></div>
             </div>
@@ -29,18 +31,20 @@
                             <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-blue" style="right: 10px;">TCP Staff</span>
                             {% endif %}
                               <div class="row g-0">
-                                <div class="col-md-3">
+                                <div class="col-3">
                                 {% if user.profile_picture %}
                                     <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-start" alt="{{ user.username }}'s avatar">
                                 {% else %}
                                     <img src="{% static 'custom/images/user-pfp-generic.png' %}" class="img-fluid rounded-start" alt="Avatar">
                                 {% endif %}
                                 </div>
-                                <div class="col-md-9">
-                                  <div class="card-body">
-                                    <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
-                                    <!--{% if user == request.user %}<p class="card-text">(You) {% endif %}{% if user.is_staff %}TPC Staff</p>{% endif %}-->
-                                    <p class="card-text">@{{ user.username }}</p>
+                                <div class="col-9 d-flex align-items-center">
+                                  <div class="card-body p-0 ps-3">
+                                    <h5 class="card-title mb-1">{{ user.first_name }} {{ user.last_name }}</h5>
+                                    <!--<p class="card-text mb-0">@{{ user.username }}</p>-->
+                                    {% if user|get_preference:'bio_current_professional_title' %}
+                                    <p class="card-text mb-0">{{ user|get_preference:'bio_current_professional_title' }}</p>
+                                    {% endif %}
                                   </div>
                                 </div>
                               </div>

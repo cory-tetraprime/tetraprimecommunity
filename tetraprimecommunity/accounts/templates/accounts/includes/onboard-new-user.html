@@ -1,51 +1,48 @@
 {% load static %}
 {% csrf_token %}
-<div id="feature-onboarding" class="container mt-4">
+<div id="feature-onboarding" class="container my-4">
     <div class="row">
-        <div class="col-12 col-md-9 mx-auto">
+        <div class="feature-onboarding-checklist col col-12 col-md-9 p-4 mx-auto rounded">
             {% if not profile_status.incomplete_groups %}
-            <h2 class="fs-3 text-center"><i class="bi bi-star color-gold"></i> Congrats!</h2>
-            <p class="text-center fw-bold">Thank you for completing your profile!</p>
-            <p class="text-center px-2 mb-4">The community is stronger thanks to you!</p>
+            <h2 class="fs-3 text-center pt-2"><i class="bi bi-star color-gold"></i> Congrats!</h2>
+            <p class="text-center mb-2 fw-bold">Thank you for completing your profile.</p>
+            <p class="text-center px-2 mb-4">We are stronger thanks to you!</p>
             {% else %}
-            <h2 class="fs-4 text-center mb-2"><i class="bi bi-graph-up-arrow me-1 fs-5"></i> Community Profile Strength</h2>
-            <p class="text-center mb-4">Doing this fosters meaningful connections, showcases your skills & interests, and helps others collaborate with you, ultimately strengthening the whole community.</p>
+            <h2 class="fs-4 text-center mb-3 pt-2"><i class="bi bi-graph-up-arrow me-1 fs-5"></i> Community Profile Strength</h2>
+            <p class="text-center px-3">A strong profile creates meaningful connections, showcases your skills & interests, helps others collaborate with you, and strengthens the whole community.</p>
+            <p class="text-center mb-4"><a href="{% url 'edit_profile' %}" class="btn btn-success btn-sm"><i class="bi bi-pencil-square me-1"></i> Begin by editing your profile</a></p>
             {% endif %}
+            <div class="col col-md-9 mx-auto">
+                <div class="progress mt-3">
+                    <div class="progress-bar" role="progressbar" style="width: {{ profile_status.percentage }}%" aria-valuenow="{{ profile_status.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
 
-            <div class="progress mt-3">
-                <div class="progress-bar" role="progressbar" style="width: {{ profile_status.percentage }}%" aria-valuenow="{{ profile_status.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                <ul class="list-group mt-3">
+                    {% for group in profile_status.completed_groups %}
+                    <li class="list-group-item row-collapsed d-flex">
+                        <div class="col-12">
+                            <i class="bi bi-check-circle-fill me-1"></i> {{ group }}
+                        </div>
+                        <!--<div class="col-3 text-end">
+                            <span>+1 <i class="bi bi-cookie" title="Cookies"></i></span>
+                        </div>-->
+                    </li>
+                    {% endfor %}
+
+                    {% for group in profile_status.incomplete_groups  %}
+                    <li class="list-group-item row-collapsed d-flex">
+                        <div class="col">
+                            <i class="bi bi-circle me-1"></i> {{ group }}
+                        </div>
+                        <!--<div class="col-auto fs-6 text-end">
+                            <a href="{% url 'edit_profile' %}#getting-to-know-you" title="Edit" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
+                        </div>-->
+                    </li>
+                    {% endfor %}
+
+                </ul>
+                <div class="mt-2 text-center"><a id="hide-onboarding" href="#" class="text-black-50" title="Can be changed in Preferences"><i class="bi bi-eye-slash"></i> Hide for now</a></div>
             </div>
-            <ul class="list-group fs-5 mt-3">
-
-                {% for group in profile_status.completed_groups %}
-                <li class="list-group-item row-collapsed d-flex">
-                    <div class="col-12">
-                        <i class="bi bi-check-circle-fill me-1"></i> {{ group }}
-                    </div>
-                    <!--<div class="col-3 text-end">
-                        <span>+1 <i class="bi bi-cookie" title="Cookies"></i></span>
-                    </div>-->
-                </li>
-                {% endfor %}
-
-                {% for group in profile_status.incomplete_groups  %}
-                <li class="list-group-item row-collapsed d-flex">
-                    <div class="col-9">
-                        <i class="bi bi-circle me-1"></i> {{ group }}
-                    </div>
-                    <div class="col-3 fs-6 text-end">
-                        <a href="{% url 'edit_profile' %}#getting-to-know-you" title="Edit" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil-square"></i></a>
-                    </div>
-                </li>
-                {% endfor %}
-
-            </ul>
-            <div class="mt-2 text-center"><a id="hide-onboarding" href="#" class="text-black-50" title="Can be changed in Preferences"><i class="bi bi-eye-slash"></i> Hide for now</a></div>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col">
-
         </div>
     </div>
 </div>

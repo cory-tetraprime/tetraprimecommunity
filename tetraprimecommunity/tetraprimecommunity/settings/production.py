@@ -1,6 +1,6 @@
 from .base import *
 
-DEBUG = False
+DEBUG = True
 
 try:
     from .local import *
@@ -23,16 +23,24 @@ DATABASES = {
     "default": env.dj_db_url("DATABASE_URL", default="postgres://postgres2@db/postgres2")
 }
 
-STATIC_URL = "https://tetraprime.s3.amazonaws.com/"
-MEDIA_URL = STATIC_URL + "media/"
+# STATIC_URL = "https://tetraprime.s3.amazonaws.com/"
+MEDIA_URL = "https://tetraprime.s3.amazonaws.com/"
 
 INSTALLED_APPS = INSTALLED_APPS + ["storages"]
-STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-AWS_QUERYSTRING_AUTH = False
+# STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
+# AWS_QUERYSTRING_AUTH = False
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = "private"
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default="")
 AWS_S3_REGION_NAME = 'us-east-1'
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default="")
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default="")

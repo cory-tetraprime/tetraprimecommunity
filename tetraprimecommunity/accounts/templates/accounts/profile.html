@@ -2,13 +2,14 @@
 {% load static %}
 {% load preferences_filters %}
 
+{% block title %}Your Profile{% endblock %}
 {% block body_class %}page-user-profile{% endblock %}
 
 {% block content %}
 
 {% include 'accounts/includes/header-tag.html' %}
 
-<main class="container">
+<main class="col-11 mx-auto mt-md-3">
     <div class="row">
         {% include 'accounts/includes/profile-banner.html' %}
     </div>
@@ -18,19 +19,29 @@
             {% include 'accounts/includes/profile-nav-left.html' %}
             {% endcomment %}
         </div>-->
-        <div class="col px-3 px-md-5 pt-0 d-flex flex-column position-relative">
-            <div id="profile--action-bar" class="row d-flex flex-row fs-5 w-100">
+        <div class="col px-4 px-md-5 pt-0 d-flex flex-column position-relative">
+            <div id="profile--action-bar" class="row d-flex flex-row fs-5">
                 {% if user == request.user %}
                 <!--<div class="col-auto"><span id="user&#45;&#45;info-cookies">1</span> <i class="bi bi-cookie" title="Cookies"></i></div>-->
                 {% endif %}
+
                 <!--<div class="col-auto"><span id="user&#45;&#45;info-connects">0</span> <i class="bi bi-people-fill" title="Connections"></i></div>-->
-                <div class="col d-flex justify-content-end">
-                    {% if user|get_preference:"private_profile" != True %}
-                    <!--<a href="https://tetraprime.community/accounts/profile/@{{ user.username }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-share" title="Share Profile"></i></a>-->
-                    {% else %}
-                    <a href="javascript:void(0);" class="btn btn-dark btn-sm"><i class="bi bi-eye-slash" title="Private Profile"></i></a>
-                    {% endif %}
+                <!--<a href="https://tetraprime.community/accounts/profile/@{{ user.username }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-share" title="Share Profile"></i></a>-->
+
+                {% if user|get_preference:"private_profile" != True %}
+                {% else %}
+                <div class="col-auto d-flex justify-content-start">
+                    <a href="{% url 'edit_profile' %}#user-preferences" class="btn btn-dark btn-sm"><i class="bi bi-eye-slash" title="Private Profile"></i></a>
                 </div>
+                {% endif %}
+
+                {% if user == request.user %}
+                <div class="col d-flex justify-content-end">
+                    <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil-square me-0 me-md-1"></i> <span class="d-none d-md-inline">Edit Profile</span></a>
+                </div>
+                {% endif %}
+
+
                 {% if user != request.user %}
                 <!--<div class="col-auto d-flex justify-content-end">
                     <a href="#follow" class="btn btn-outline-primary btn-sm"><i class="bi bi-people-fill" title="Connections"></i> Connect</a>
@@ -68,33 +79,33 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="professional-overview">
                         <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            <span class="fs-4 mb-0 fw-normal"><i class="bi bi-person-lines-fill me-1 color-blueviolet"></i> Professional Overview</span>
+                            <span class="fs-4 mb-0 fw-normal"><i class="bi bi-person-lines-fill me-1 color-dodgerblue"></i> Professional Overview</span>
                         </button>
                     </h2>
                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="professional-overview" data-bs-parent="#user--accordion-about">
                         <div class="accordion-body">
                             {% if user|get_preference:'bio_current_professional_title' %}
                             <div class="mb-4">
-                                <h3 class="mb-2 fs-6 color-blueviolet">Professional Title</h3>
+                                <h3 class="mb-2 fs-6 color-dodgerblue">Professional Title</h3>
                                 {{ user|get_preference:'bio_current_professional_title'|linebreaks }}
                             </div>
                             {% endif %}
                             {% if user|get_preference:'bio_top_technical_skills' %}
                             <div class="mb-4">
-                                <h3 class="mb-2 fs-6 color-blueviolet">Top Technical Skills</h3>
+                                <h3 class="mb-2 fs-6 color-dodgerblue">Top Technical Skills</h3>
                                 {{ user|get_preference:'bio_top_technical_skills'|linebreaks }}
-                            </div>
-                            {% endif %}
-                            {% if user|get_preference:'bio_relevant_certifications' %}
-                            <div class="mb-4">
-                                <h3 class="mb-2 fs-6 color-blueviolet">Relevant Certifications</h3>
-                                {{ user|get_preference:'bio_relevant_certifications'|linebreaks }}
                             </div>
                             {% endif %}
                             {% if user|get_preference:'bio_favorite_tools_and_technologies' %}
                             <div class="mb-4">
-                                <h3 class="mb-2 fs-6 color-blueviolet">Favorite Tools & Technologies</h3>
+                                <h3 class="mb-2 fs-6 color-dodgerblue">Favorite Tools & Technologies</h3>
                                 {{ user|get_preference:'bio_favorite_tools_and_technologies'|linebreaks }}
+                            </div>
+                            {% endif %}
+                            {% if user|get_preference:'bio_relevant_certifications' %}
+                            <div class="mb-4">
+                                <h3 class="mb-2 fs-6 color-dodgerblue">Training and/or Certifications</h3>
+                                {{ user|get_preference:'bio_relevant_certifications'|linebreaks }}
                             </div>
                             {% endif %}
                         </div>
@@ -182,32 +193,32 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="personality-interests">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                            <span class="fs-4 mb-0 fw-normal"><i class="bi bi-stars me-1 color-dodgerblue"></i> Personality & Interests</span>
+                            <span class="fs-4 mb-0 fw-normal"><i class="bi bi-stars me-1 color-blueviolet"></i> Personality & Interests</span>
                         </button>
                     </h2>
                     <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="personality-interests" data-bs-parent="#user--accordion-about">
                         <div class="accordion-body">
                             {% if user|get_preference:'bio_favorite_quote' %}
                             <div class="mb-4">
-                                <h3 class="mb-2 fs-6 color-dodgerblue">Favorite Quote</h3>
+                                <h3 class="mb-2 fs-6 color-blueviolet">Favorite Quote</h3>
                                 {{ user|get_preference:'bio_favorite_quote'|linebreaks }}
                             </div>
                             {% endif %}
                             {% if user|get_preference:'bio_superpower' %}
                             <div class="mb-4">
-                                <h3 class="mb-2 fs-6 color-dodgerblue">Super Power</h3>
+                                <h3 class="mb-2 fs-6 color-blueviolet">Super Power</h3>
                                 {{ user|get_preference:'bio_superpower'|linebreaks }}
                             </div>
                             {% endif %}
                             {% if user|get_preference:'bio_first_experience_in_tech' %}
                             <div class="mb-4">
-                                <h3 class="mb-2 fs-6 color-dodgerblue">First Experience In Tech</h3>
+                                <h3 class="mb-2 fs-6 color-blueviolet">First Experience In Tech</h3>
                                 {{ user|get_preference:'bio_first_experience_in_tech'|linebreaks }}
                             </div>
                             {% endif %}
                             {% if user|get_preference:'bio_hobbies_and_passions' %}
                             <div class="mb-4">
-                                <h3 class="mb-2 fs-6 color-dodgerblue">Hobbies & Passions</h3>
+                                <h3 class="mb-2 fs-6 color-blueviolet">Hobbies & Passions</h3>
                                 {{ user|get_preference:'bio_hobbies_and_passions'|linebreaks }}
                             </div>
                             {% endif %}

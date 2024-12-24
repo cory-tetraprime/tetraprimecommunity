@@ -2,6 +2,7 @@
 {% load static %}
 {% load preferences_filters %}
 
+{% block title %}Edit Your Profile{% endblock %}
 {% block body_class %}page-edit-profile{% endblock %}
 
 {% block content %}
@@ -10,7 +11,7 @@
 <style xmlns:user>
     form label { font-weight: bold; }
 </style>
-<main class="container">
+<main class="col-11 mx-auto mt-md-3">
     <div class="row">
         {% include 'accounts/includes/profile-banner.html' %}
     </div>
@@ -20,7 +21,7 @@
             {% include 'accounts/includes/profile-nav-left.html' %}
             {% endcomment %}
         </div>-->
-        <div class="col px-3 px-md-5 pt-0 d-flex flex-column position-relative">
+        <div class="col px-5 pt-0 d-flex flex-column position-relative">
             <div id="profile--action-bar" class="row d-flex flex-row fs-5 w-100">
                 {% if user == request.user %}
                 <!--<div class="col-auto"><span id="user&#45;&#45;info-cookies">1</span> <i class="bi bi-cookie" title="Cookies"></i></div>-->
@@ -46,7 +47,7 @@
             <img src="{% static 'custom/images/user-pfp-generic.png' %}" alt="Profile Picture" class="profile-picture align-self-center mb-5">
             {% endif %}
 <!--            <h1 class="text-center mb-4">Edit Profile</h1>-->
-            <h1 class="fs-2 mb-4 text-center"><i class="bi bi-person-vcard"></i> Profile Basics</h1>
+            <h1 class="fs-2 mb-5 text-center"><i class="bi bi-person-vcard"></i> Profile Basics</h1>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.non_field_errors }}
@@ -77,7 +78,7 @@
                         {{ form.country.errors }}
                     </div>
                     <div class="col-12 mb-5">
-                        <label for="id_bio_intro" class="form-label">Profile Bio <span class="fw-normal fs-6"><em>(<span id="bio_intro_counter">500</span> characters remaining)</em></span></label>
+                        <label for="id_bio_intro" class="form-label">Profile Intro <span class="fw-normal fs-6"><em>(<span id="bio_intro_counter">500</span> characters remaining)</em></span></label>
                         {{ form.bio_intro }}
                         {{ form.bio_intro.errors }}
                     </div>
@@ -98,6 +99,7 @@
                     </script>
                     <div class="col-md-4 mb-5">
                         <h2 class="form-label fs-3">Profile Picture</h2>
+                        <p><i class="bi bi-exclamation-triangle color-orange"></i> Must be under 600kb</p>
                         <div class="mt-1 mb-2">
                         {% if profile_user.profile_picture %}
                             <img src="{{ profile_user.profile_picture.url }}" alt="Profile Picture" class="rounded w-75">
@@ -130,6 +132,7 @@
                     </div>
                     <div class="col-md-6 offset-md-2 mb-5">
                         <h2 class="form-label fs-3">Profile Banner</h2>
+                        <p><i class="bi bi-exclamation-triangle color-orange"></i> Must be under 600kb</p>
                         <div class="mt-1 mb-2">
                         {% if user.banner_image %}
                             <img src="{{ user.banner_image.url }}" alt="Banner Image" class="rounded w-100">
@@ -174,31 +177,19 @@
                                     {{ form.bio_current_professional_title.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Top technical skills:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_top_technical_skills" class="form-label">{{ form.bio_top_technical_skills.label }}</label>
                                     {{ form.bio_top_technical_skills }}
                                     {{ form.bio_top_technical_skills.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Relevant certifications:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
-                                    <label for="id_bio_relevant_certifications" class="form-label">{{ form.bio_relevant_certifications.label }}</label>
-                                    {{ form.bio_relevant_certifications }}
-                                    {{ form.bio_relevant_certifications.errors }}
-                                </div>
-                                <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Favorite Tools & Technologies:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_favorite_tools_and_technologies" class="form-label">{{ form.bio_favorite_tools_and_technologies.label }}</label>
                                     {{ form.bio_favorite_tools_and_technologies }}
                                     {{ form.bio_favorite_tools_and_technologies.errors }}
+                                </div>
+                                <div class="mb-4">
+                                    <label for="id_bio_relevant_certifications" class="form-label">{{ form.bio_relevant_certifications.label }}</label>
+                                    {{ form.bio_relevant_certifications }}
+                                    {{ form.bio_relevant_certifications.errors }}
                                 </div>
                                 <div class="mt-4 mb-2 d-flex justify-content-center">
                                     <button type="submit" class="btn btn-outline-success w-auto"><i class="bi bi-floppy-fill"></i> Save Profile</button>
@@ -215,37 +206,21 @@
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="aspirations-projects" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Career Goals:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_career_goals" class="form-label">{{ form.bio_career_goals.label }}</label>
                                     {{ form.bio_career_goals }}
                                     {{ form.bio_career_goals.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Areas for Growth:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_areas_for_growth" class="form-label">{{ form.bio_areas_for_growth.label }}</label>
                                     {{ form.bio_areas_for_growth }}
                                     {{ form.bio_areas_for_growth.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Dream Project:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_dream_project" class="form-label">{{ form.bio_dream_project.label }}</label>
                                     {{ form.bio_dream_project }}
                                     {{ form.bio_dream_project.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Projects You're Proud of:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_projects_youre_proud_of" class="form-label">{{ form.bio_projects_youre_proud_of.label }}</label>
                                     {{ form.bio_projects_youre_proud_of }}
                                     {{ form.bio_projects_youre_proud_of.errors }}
@@ -265,37 +240,21 @@
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="collaboration-teams" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Open for Collaboration On:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_open_for_collaboration_on" class="form-label">{{ form.bio_open_for_collaboration_on.label }}</label>
                                     {{ form.bio_open_for_collaboration_on }}
                                     {{ form.bio_open_for_collaboration_on.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Seeking a Mentor:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_seeking_a_mentor" class="form-label">{{ form.bio_seeking_a_mentor.label }}</label>
                                     {{ form.bio_seeking_a_mentor }}
                                     {{ form.bio_seeking_a_mentor.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Open to Mentoring Others:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_open_to_mentoring_others" class="form-label">{{ form.bio_open_to_mentoring_others.label }}</label>
                                     {{ form.bio_open_to_mentoring_others }}
                                     {{ form.bio_open_to_mentoring_others.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Need Help With:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_need_help_with" class="form-label">{{ form.bio_need_help_with.label }}</label>
                                     {{ form.bio_need_help_with }}
                                     {{ form.bio_need_help_with.errors }}
@@ -315,37 +274,21 @@
                         <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="personality-interests" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Favorite Quote:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_favorite_quote" class="form-label">{{ form.bio_favorite_quote.label }}</label>
                                     {{ form.bio_favorite_quote }}
                                     {{ form.bio_favorite_quote.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Superpower:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_superpower" class="form-label">{{ form.bio_superpower.label }}</label>
                                     {{ form.bio_superpower }}
                                     {{ form.bio_superpower.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        First Experience in Tech:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_first_experience_in_tech" class="form-label">{{ form.bio_first_experience_in_tech.label }}</label>
                                     {{ form.bio_first_experience_in_tech }}
                                     {{ form.bio_first_experience_in_tech.errors }}
                                 </div>
                                 <div class="mb-4">
-<!--                                    <label>-->
-<!--                                        Hobbies & Passions:-->
-<!--                                    </label>-->
-<!--                                    <textarea name="coming-soon" class="form-control"></textarea>-->
                                     <label for="id_bio_hobbies_and_passions" class="form-label">{{ form.bio_hobbies_and_passions.label }}</label>
                                     {{ form.bio_hobbies_and_passions }}
                                     {{ form.bio_hobbies_and_passions.errors }}
@@ -358,7 +301,7 @@
                     </div>
                 </div>
                 <hr>
-                <h1 class="fs-2 mt-5 mb-4 text-center"><i class="bi bi-gear"></i> Preferences</h1>
+                <h1 id="user-preferences" class="fs-2 mt-5 mb-4 text-center"><i class="bi bi-gear"></i> Preferences</h1>
                 <div class="row fs-5">
                     <div class="col-12 mb-4">
                         <label class="fw-normal">

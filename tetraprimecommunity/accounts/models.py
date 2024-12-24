@@ -78,6 +78,7 @@ class CustomUser(AbstractUser):
     def profile_completion_status(self):
         """Calculate profile completion percentage and missing fields."""
         GROUPED_PREFERENCES_FIELDS = {
+            'Profile Introduction': ['bio_intro'],
             'Professional Overview': ['bio_current_professional_title', 'bio_top_technical_skills', 'bio_relevant_certifications', 'bio_favorite_tools_and_technologies'],
             'Aspirations & Projects': ['bio_career_goals', 'bio_dream_project', 'bio_projects_youre_proud_of', 'bio_areas_for_growth'],
             'Collaboration & Teams': ['bio_open_for_collaboration_on', 'bio_seeking_a_mentor', 'bio_open_to_mentoring_others', 'bio_need_help_with'],

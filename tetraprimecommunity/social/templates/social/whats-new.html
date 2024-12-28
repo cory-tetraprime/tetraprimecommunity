@@ -1,91 +1,101 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}What's New{% endblock %}
 {% block body_class %}page-discover{% endblock %}
 
 {% block content %}
 
 {% include 'accounts/includes/header-tag.html' %}
 
-<main class="col-11 mx-auto mt-md-3">
-    <!-- What's New Section -->
-    <section id="whats-new" class="px-3 pt-4 px-md-5 mt-3 mb-5">
-        <h1 class="text-center mt-3 mb-5"><i class="bi bi-newspaper color-blueviolet"></i> What's New</h1>
-            <div class="row">
-                <div class="col-12 col-md-5 mb-5">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h2 class="card-title mb-3"><i class="bi bi-journal-text color-lightblue"></i> Latest Release</h2>
+<main class="container-fluid">
+    <div class="col">
+        <!-- What's New Section -->
+        <section id="whats-new" class="px-3 pt-4 px-md-5 mt-3 mb-5">
+            <h1 class="text-center mt-3 mb-5"><i class="bi bi-newspaper color-blueviolet"></i> What's New</h1>
+                <div class="row">
+                    <div class="col-12 col-md-5 mb-5">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h2 class="card-title mb-3"><i class="bi bi-journal-text color-lightblue"></i> Latest Release</h2>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <strong>Feature:</strong> Added new user onboarding questions.
+                                    </li>
+                                    <li class="mb-2">
+                                        <strong>Improvement:</strong> Added dark mode to user preferences.
+                                    </li>
+                                    <li class="mb-2">
+                                        <strong>Bug Fix:</strong> No open issues.
+                                    </li>
+                                </ul>
+                                <!--<a href="{% url 'tpc_whats_new_release_notes' %}" class="btn btn-outline-primary mt-3">Read Full Release Notes</a>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5 p-3 offset-md-1">
+                        <h2 class="mb-3"><i class="bi bi-check-square color-lightblue"></i> Next Release</h2>
+                        <div class="rounded">
                             <ul class="list-unstyled">
                                 <li class="mb-2">
-                                    <strong>Feature:</strong> Added new user onboarding questions.
+                                    <strong>Feature:</strong> Ability to create and manage a Project.
                                 </li>
                                 <li class="mb-2">
-                                    <strong>Improvement:</strong> Added dark mode to user preferences.
+                                    <strong>Improvement:</strong> More security and moderation.
                                 </li>
                                 <li class="mb-2">
                                     <strong>Bug Fix:</strong> No open issues.
                                 </li>
                             </ul>
-                            <!--<a href="{% url 'tpc_whats_new_release_notes' %}" class="btn btn-outline-primary mt-3">Read Full Release Notes</a>-->
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <!-- Community Growth Section -->
+        <section id="community-growth" class="px-3 px-md-5 pt-4 mt-3 mb-5">
+            <div class="row">
+                <div class="col-12 col-md-5 mb-5">
+                    <h2 class="mb-3"><i class="bi bi-people-fill color-lightblue"></i> Community Stats</h2>
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <h3 class="card-title text-success">Coming</h3>
+                                    <p class="card-text fw-bold">Soon</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <h3 class="card-title text-success">Coming</h3>
+                                    <p class="card-text fw-bold">Soon</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <h3 class="card-title text-success">Coming</h3>
+                                    <p class="card-text fw-bold">Soon</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-md-5 p-3 offset-md-1">
-                    <h2 class="mb-3"><i class="bi bi-check-square color-lightblue"></i> Next Release</h2>
+                    <h2 class="mb-3"><i class="bi bi-patch-question color-lightblue"></i> Have any feedback?</h2>
                     <div class="rounded">
-                        <ul class="list-unstyled">
-                            <li class="mb-2">
-                                <strong>Feature:</strong> Ability to create and manage a Project.
-                            </li>
-                            <li class="mb-2">
-                                <strong>Improvement:</strong> More security and moderation.
-                            </li>
-                            <li class="mb-2">
-                                <strong>Bug Fix:</strong> No open issues.
-                            </li>
-                        </ul>
+                        <p class="mb-4">We're always looking for ways to improve your experience on Tetra Prime Community. Let us know what you think or suggest new features by filling out our feedback form.</p>
+                        <a href="https://www.tetraprime.consulting/helpdesk/tetra-prime-community-support-7" target="_blank" class="btn btn-outline-success">Submit Feedback</a>
                     </div>
                 </div>
             </div>
-    </section>
+        </section>
 
-    <!-- Community Growth Section -->
-    <section id="community-growth" class="px-3 px-md-5 pt-4 mt-3 mb-5">
-        <div class="row">
-            <div class="col-12 col-md-5 mb-5">
-                <h2 class="mb-3"><i class="bi bi-people-fill color-lightblue"></i> Community Stats</h2>
-                <div class="row">
-                    <div class="col-12 col-md-6 mb-4">
-                        <div class="card text-center shadow-sm">
-                            <div class="card-body">
-                                <h3 class="card-title text-success">Coming</h3>
-                                <p class="card-text fw-bold">Soon</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <div class="card text-center shadow-sm">
-                            <div class="card-body">
-                                <h3 class="card-title text-success">Coming</h3>
-                                <p class="card-text fw-bold">Soon</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-5 p-3 offset-md-1">
-                <h2 class="mb-3"><i class="bi bi-patch-question color-lightblue"></i> Your Feedback Matters</h2>
-                <div class="rounded">
-                    <p class="mb-4">We're always looking for ways to improve your experience on TPC. Let us know what you think or suggest new features by filling out our feedback form.</p>
-                    <a href="https://www.tetraprime.consulting/helpdesk/tetra-prime-community-support-7" target="_blank" class="btn btn-outline-success">Submit Feedback</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Community Guidelines Section -->
-    <section id="guidelines" class="px-3 px-md-5 pt-4 mt-3 mb-5">
+        <!-- Community Guidelines Section -->
+        <section id="guidelines" class="px-3 px-md-5 pt-4 mt-3 mb-5">
         <h2 class="mb-4 text-center"><i class="bi bi-person-lines-fill color-lightblue"></i> Community Guidelines</h2>
         <div class="card shadow-sm">
             <div class="card-body">
@@ -106,6 +116,6 @@
             </div>
         </div>
     </section>
-
+    </div>
 </main>
 {% endblock %}

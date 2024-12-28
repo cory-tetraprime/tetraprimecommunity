@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% load preferences_filters %}
+
+{% block title %}Invite Member{% endblock %}
+{% block body_class %}page-project-invite-member{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container-fluid">
+    <div class="col">
+        <div class="row">
+            <div class="col-12 p-4 px-md-5 mt-3">
+                <h1 class="text-center"><i class="bi bi-people-fill color-mediumseagreen"></i> Invite Member</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 p-4 d-none d-md-flex">
+                {% include 'projects/includes/projects-nav-left.html' %}
+            </div>
+            <div class="col px-5 py-4 d-flex flex-column">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <!-- TODO: Add invite message -->
+                    <button type="submit" class="btn btn-success">Send Invitation</button>
+                    <!-- TODO: Add cancel button -->
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

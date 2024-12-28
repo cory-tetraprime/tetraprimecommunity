@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'images',
     'documents',
     'social',
+    'projects',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'

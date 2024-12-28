@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+{% load preferences_filters %}
+
+{% block title %}Project Details{% endblock %}
+{% block body_class %}page-project-detail{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container-fluid">
+    <div class="col">
+        <div class="row">
+            {% if project.banner_image %}
+            <div id="profile--banner" style="background-image: url('{{ project.banner_image.url }}');"></div>
+            {% else %}
+            <div id="profile--banner" style="background-image: url('{% static 'custom/images/user-banner-generic.jpg' %}');">
+            <!--    <div id="navbar&#45;&#45;mobile" class="row p-2">
+                    <div class="col-auto fs-3"><a href="#mobile-menu"><i class="bi bi-list"></i></a></div>
+                </div>-->
+            </div>
+            {% endif %}
+        </div>
+        <div class="row mt-3">
+            <div class="col px-4 px-md-5 pt-0 d-flex flex-column position-relative">
+                <div id="profile--action-bar" class="row d-flex flex-row fs-5">
+                    {% if project.visibility == 'private' %}
+                    <div class="col d-flex justify-content-start">
+                        {% if project.creator == request.user %}
+                        <a href="{% url 'edit_project' project.id %}#user-preferences" class="btn btn-dark btn-sm"><i class="bi bi-eye-slash" title="Private Project"></i></a>
+                        {% else %}
+                        <a href="javascript:void(0);" class="btn btn-dark btn-sm"><i class="bi bi-eye-slash" title="Private Project"></i></a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div class="col d-flex justify-content-end">
+                    {% if project.creator == request.user %}
+                        <a href="{% url 'edit_project' project.id %}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil-square me-0 me-md-1"></i> <span class="d-none d-md-inline">Edit Project</span></a>
+                    {% comment %}{% elif not is_active_member %}{% endcomment %}
+                        <!-- TODO: Join Project button -->
+                        <!--<a href="{% url 'edit_project' project.id %}" class="btn btn-success btn-sm"><i class="bi bi-pencil-square me-0 me-md-1"></i> <span class="d-none d-md-inline">Join Project</span></a>-->
+                    {% endif %}
+                        <!-- TODO: Button state if user has active invite -->
+                    </div>
+                </div>
+                {% if project.profile_picture %}
+                <img src="{{ project.profile_picture.url }}" alt="Profile Picture" class="profile-picture top-0 mb-3 mx-auto"> <!--position-absolute-->
+                {% else %}
+                <img src="{% static 'custom/images/project-pfp-generic.jpg' %}" alt="Profile Picture" class="profile-picture top-0 mb-3 mx-auto"> <!--position-absolute-->
+                {% endif %}
+
+                <h1 class="profile--title text-center"><i class="bi bi-journal-richtext color-mediumseagreen"></i> {{ project.name }}</h1>
+
+                <p class="fs-6 cursor-pointer text-center"> Created {{ project.created_at|date:'m/d/Y' }} | {{ active_memberships|length }} Team Members</p>
+
+                {% if project.description %}
+                <div id="profile--bio-intro" class="mx-auto mb-4 text-center" style="max-width: 80%;">{{ project.description }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row px-5 gx-5">
+            <!--<div class="col col-md-3 p-4 d-none d-md-flex">
+                {% include 'projects/includes/projects-nav-left.html' %}
+            </div>-->
+            <div class="col-12 col-md-7 py-4 d-flex flex-column">
+                <h2 class="mb-3 fs-4"><i class="bi bi-chat-square-text color-powderblue"></i> Latest Updates</h2>
+
+                <div class="card my-3">
+                  <div class="card-body">
+                    <p class="card-text"><i class="bi bi-chat-square-quote-fill color-powderblue  me-2"></i> With supporting text below as a natural lead-in to additional content.</p>
+                  </div>
+                  <div class="card-footer text-body-secondary fs-7">
+                    12/27/24 @ 7:57 PM EST
+                  </div>
+                </div>
+                <div class="card my-3">
+                  <div class="card-body">
+                    <p class="card-text"><i class="bi bi-chat-square-quote-fill color-powderblue me-2"></i> With supporting text below as a natural lead-in to additional content and supporting text below as a natural lead-in to additional content.</p>
+                  </div>
+                  <div class="card-footer text-body-secondary fs-7">
+                    12/27/24 @ 7:57 PM EST
+                  </div>
+                </div>
+                <div class="card my-3">
+                  <div class="card-body">
+                    <p class="card-text"><i class="bi bi-chat-square-quote-fill color-powderblue me-2"></i> With supporting text below as a natural lead-in to additional content.</p>
+                  </div>
+                  <div class="card-footer text-body-secondary fs-7">
+                    12/27/24 @ 7:57 PM EST
+                  </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-5 py-4 d-flex flex-column">
+                <h2 class="mb-3 fs-4"><i class="bi bi-people color-plum"></i> Team Members</h2>
+
+                {% for membership in project.memberships.all %}
+                    {% if membership.invite_status == 'accepted' or membership.invite_status == 'pending' %}
+                    <div class="card mb-3">
+                        {% if membership.invite_status == 'pending' %}
+                        <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-success" style="right: 10px;">Invited</span>
+                        {% endif %}
+                        {% if project.creator == membership.user %}
+                        <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-info" style="right: 10px;" title="Project Creator"><i class="bi bi-star-fill"></i></span>
+                        {% endif %}
+                      <div class="row g-0">
+                        <div class="col-md-3">
+                            {% if project.creator == request.user or membership.invite_status == 'accepted' %}
+                                {% if membership.user.profile_picture %}
+                                <img src="{{ membership.user.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-start">
+                                {% else %}
+                                <img src="{% static 'custom/images/project-pfp-generic.jpg' %}" alt="Profile Picture" class="img-fluid rounded-start">
+                                {% endif %}
+                            {% else %}
+                            <img src="{% static 'custom/images/project-pfp-generic.jpg' %}" alt="Profile Picture" class="img-fluid rounded-start">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-9">
+                          <div class="card-body p-3 pe-2">
+                            {% if project.creator == request.user or membership.invite_status == 'accepted' %}
+                            <p class="card-title fw-bold mb-1">{{ membership.user.first_name }} {{ membership.user.last_name }}<!-- | @{{ membership.user.username }}--></p>
+                            {% else %}
+                            <p class="card-title fw-bold mb-1">[Invite Pending]</p>
+                            {% endif %}
+                            <p class="card-text fs-7">{{ membership.role }} {% if project.creator == request.user %}<a href="{% url 'edit_member' membership.id %}">(Manage)</a>{% endif %}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+                {% if project.creator == request.user %}
+                <div class="row">
+                    <div class="col-5 d-flex justify-content-start"><a href="#" class="btn btn-primary btn-sm"><i class="bi bi-eye me-0 me-md-1"></i> View All</a></div>
+                    <div class="col-7 d-flex justify-content-end"><a href="{% url 'add_member' project.id %}" class="btn btn-success btn-sm"><i class="bi bi-person-add me-0 me-md-1"></i> Invite New Member</a></div>
+                </div>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

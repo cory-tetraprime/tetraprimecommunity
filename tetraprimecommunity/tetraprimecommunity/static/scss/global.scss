@@ -15,6 +15,9 @@ body {
         text-decoration: none;
     }
 
+    .fs-7 { font-size: .8rem!important; }
+    .fs-8 { font-size: .6rem!important; }
+
     .btn-primary {
         background-color: #0056b3; /* New background color */
         border-color: #004085; /* New border color */
@@ -64,6 +67,7 @@ body {
         background-color: #fff;
         border-radius: 1rem;
         box-shadow: 0px -10px 12px #0000001c;
+        margin-bottom: 4rem;
         overflow: hidden;
 
         .profile-picture {
@@ -103,7 +107,7 @@ body {
 
     nav {
         ul {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             list-style-type: none;
             margin: 0;
             padding: 0;
@@ -371,6 +375,14 @@ body.dark-mode {
     body {
         header, main {
             max-width: 960px;
+        }
+    }
+}
+
+@media (max-width: 960px) {
+    body {
+        header, main {
+            max-width: 96%;
         }
     }
 }

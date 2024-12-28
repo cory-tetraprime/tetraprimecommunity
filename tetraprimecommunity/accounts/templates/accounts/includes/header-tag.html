@@ -9,7 +9,7 @@
             <ul class="nav col d-flex ms-md-2 me-lg-auto mb-2 mb-md-0">
                 <li class="me-md-5"><strong><span class="d-none d-lg-block">Tetra Prime Community</span><span class="d-block d-lg-none">TPC</span></strong></li>
                 <li class="d-none d-md-block"><a href="{% url 'profile' %}" class="pe-5"><i class="bi bi-person-vcard me-1"></i> Your Profile</a></li>
-                <li class="d-none d-md-block"><a href="{% url 'people' %}" class="pe-5"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
+                <li class="d-none d-md-block"><a href="{% url 'discover' %}" class="pe-5"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
                 <li class="d-none d-md-block"><a href="{% url 'tpc_whats_new' %}" class="pe-0"><i class="bi bi-newspaper me-1"></i> What's New</a></li>
             </ul>
 
@@ -17,6 +17,7 @@
                 <input type="search" class="form-control" placeholder="Search the community..." aria-label="Search">
             </form>-->
 
+            <!-- Dropdown nav -->
             <div class="dropdown text-end">
                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                    data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,13 +29,18 @@
                 </a>
                 <ul class="header--userdropdown dropdown-menu text-small" style="">
                     <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i> Your Profile</a></li>
-                    <li><a class="dropdown-item" href="{% url 'people' %}"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
+                    <li><a class="dropdown-item" href="{% url 'discover' %}"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
                     <li><a class="dropdown-item" href="{% url 'tpc_whats_new' %}"><i class="bi bi-newspaper me-1"></i> What's New</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="bi bi-pencil-square me-1"></i> Edit Profile</a></li>
+                    <!--<li><a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="bi bi-pencil-square me-1"></i> Edit Profile</a></li>-->
                     <!--<li><a class="dropdown-item disabled" href="#helpcenter">Help Center</a></li>-->
+                    <!--<li>
+                        <hr class="dropdown-divider">
+                    </li>-->
+                    <li><a class="dropdown-item" href="{% url 'my_projects' %}"><i class="bi bi-journals me-1"></i> Your Projects</a></li>
+                    <li><a class="dropdown-item" href="{% url 'create_project' %}"><i class="bi bi-journal-plus me-1"></i> Create Project</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>

@@ -81,7 +81,7 @@
                 <div class="row row-cols-1 row-cols-md-2 g-4">
                 {% for project in active_projects %}
                     <div class="col">
-                        <a href="{% url 'project_detail' project.id %}" class="results--person">
+                        <a href="{% url 'project_detail' project.id %}" class="results--project">
                             <div class="card">
                                 {% if project.creator == request.user %}
                                 <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-blue" style="right: 10px;">Yours</span>

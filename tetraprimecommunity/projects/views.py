@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import ProjectForm, EditProjectForm, AddMemberForm, EditMemberForm
 from .models import Project, ProjectMembership
+from inbox.utils import create_alert, send_message_logic
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 
@@ -81,6 +82,7 @@ def add_member(request, project_id):
         if form.is_valid():
             username = form.cleaned_data['username']
             user = User.objects.filter(username=username).first()
+            role = form.cleaned_data['role']
 
             if user:
                 # Check if the user is already a member or invited
@@ -91,9 +93,32 @@ def add_member(request, project_id):
                     ProjectMembership.objects.create(
                         user=user,
                         project=project,
-                        role='',
+                        role=role,
                         invite_status='pending'
                     )
+
+                    # create_alert(
+                    #     user=user,
+                    #     title="New Project Invite",
+                    #     body="Go to Your Projects to review.",
+                    #     alert_type="info"
+                    # )
+
+                    # Get the invite message
+                    invite_message = form.cleaned_data.get('invite_message', 'Greetings, you have been invited! Please review the Your Projects page. Thank you!')
+
+                    sender = request.user
+                    receiver_username = user.username
+                    subject = f'Invite to: {project.name}'
+                    body = invite_message
+
+                    new_message, error = send_message_logic(sender, receiver_username, subject, body)
+
+                    if error:
+                        messages.error(request, f'Error: {error}', 'danger')
+                    else:
+                        messages.success(request, 'Project invite sent!', 'success')
+
                     return redirect('project_detail', project_id=project.id)
             else:
                 form.add_error('username', 'User with this username does not exist.')

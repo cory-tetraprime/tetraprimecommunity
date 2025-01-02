@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import login
 from django.contrib.auth.views import LogoutView
+from inbox.models import Alert, MessageReadStatus
 from .forms import CustomUserCreationForm, CustomUserEditForm
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
@@ -38,6 +39,7 @@ def profile_view(request):
     # Logged in user profile view
     user = request.user
     profile_status = user.profile_completion_status()  # Retrieve completion status
+
     return render(
         request,
         'accounts/profile.html',

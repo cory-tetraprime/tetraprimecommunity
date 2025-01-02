@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'documents',
     'social',
     'projects',
+    'inbox',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -94,6 +95,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 # 'accounts.context_processors.global_variables',
+                'inbox.context_processors.unread_counts_processor',
             ],
         },
     },

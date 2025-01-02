@@ -1,7 +1,6 @@
 from django import forms
 from .models import Project
 from .models import ProjectMembership
-from .models import Project
 from django.utils.translation import gettext_lazy as _
 
 
@@ -20,7 +19,13 @@ class ProjectForm(forms.ModelForm):
 
 
 class AddMemberForm(forms.Form):
-    username = forms.CharField(label="Invite Member by Username", required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    username = forms.CharField(label="Invite Member by Username", required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-3'}))
+    role = forms.CharField(label="Team Member Role", required=True, widget=forms.TextInput(attrs={'class': 'form-control mb-3'}))
+
+    invite_message = forms.CharField(
+        required=False,  # Allow this field to be optional
+        widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'placeholder': 'Please add an invite message...'})
+    )
 
 
 class EditMemberForm(forms.ModelForm):

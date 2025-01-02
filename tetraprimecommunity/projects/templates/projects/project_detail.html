@@ -117,8 +117,8 @@
                             <img src="{% static 'custom/images/project-pfp-generic.jpg' %}" alt="Profile Picture" class="img-fluid rounded-start">
                             {% endif %}
                         </div>
-                        <div class="col-md-9">
-                          <div class="card-body p-3 pe-2">
+                        <div class="col-md-9 d-flex align-items-center">
+                          <div class="card-body p-2 ps-3">
                             {% if project.creator == request.user or membership.invite_status == 'accepted' %}
                             <p class="card-title fw-bold mb-1">{{ membership.user.first_name }} {{ membership.user.last_name }}<!-- | @{{ membership.user.username }}--></p>
                             {% else %}

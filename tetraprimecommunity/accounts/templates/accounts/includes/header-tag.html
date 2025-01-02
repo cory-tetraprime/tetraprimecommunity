@@ -19,6 +19,7 @@
 
             <!-- Dropdown nav -->
             <div class="dropdown text-end">
+                {% if unread_counts.unread_total %}<span class="position-absolute top-0 start-0 translate-middle p-1 bg-success border border-light rounded-circle"><span class="visually-hidden">New alerts</span></span>{% endif %}
                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                    data-bs-toggle="dropdown" aria-expanded="false">
                     {% if request.user.profile_picture %}
@@ -28,19 +29,20 @@
                     {% endif %}
                 </a>
                 <ul class="header--userdropdown dropdown-menu text-small" style="">
-                    <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i> Your Profile</a></li>
-                    <li><a class="dropdown-item" href="{% url 'discover' %}"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
-                    <li><a class="dropdown-item" href="{% url 'tpc_whats_new' %}"><i class="bi bi-newspaper me-1"></i> What's New</a></li>
+                    <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="{% url 'my_projects' %}"><i class="bi bi-journals me-1"></i> Projects</a></li>
+                    <li class="position-relative"><a class="dropdown-item" href="{% url 'inbox' %}"><i class="bi bi-envelope-exclamation me-1"></i> Messages {% if unread_counts.unread_total %}<span class="badge rounded-pill bg-success ms-1" style="" title="{{ unread_counts.unread_total }} Unread">{{ unread_counts.unread_total }}</span>{% endif %}</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
+                    <li><a class="dropdown-item" href="{% url 'discover' %}"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
+                    <li><a class="dropdown-item" href="{% url 'tpc_whats_new' %}"><i class="bi bi-newspaper me-1"></i> What's New</a></li>
                     <!--<li><a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="bi bi-pencil-square me-1"></i> Edit Profile</a></li>-->
                     <!--<li><a class="dropdown-item disabled" href="#helpcenter">Help Center</a></li>-->
                     <!--<li>
                         <hr class="dropdown-divider">
                     </li>-->
-                    <li><a class="dropdown-item" href="{% url 'my_projects' %}"><i class="bi bi-journals me-1"></i> Your Projects</a></li>
-                    <li><a class="dropdown-item" href="{% url 'create_project' %}"><i class="bi bi-journal-plus me-1"></i> Create Project</a></li>
+                    <!--<li><a class="dropdown-item" href="{% url 'create_project' %}"><i class="bi bi-journal-plus me-1"></i> Create Project</a></li>-->
                     <li>
                         <hr class="dropdown-divider">
                     </li>

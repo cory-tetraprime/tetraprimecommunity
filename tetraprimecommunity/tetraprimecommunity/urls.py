@@ -16,6 +16,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('social/', include('social.urls')),
     path('projects/', include('projects.urls')),
+    path('inbox/', include('inbox.urls')),
 ]
 
 

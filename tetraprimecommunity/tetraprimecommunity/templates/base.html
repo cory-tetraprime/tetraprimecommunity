@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <html class="{% if request.user|get_preference:'dark_mode' %}dark-mode{% endif %}">
     <head>
+        <meta name="robots" content="noindex, nofollow">
+
         <meta charset="utf-8" />
         <title>
             {% block title %}

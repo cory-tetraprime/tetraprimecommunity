@@ -51,13 +51,10 @@
                 <img src="{% static 'custom/images/project-pfp-generic.jpg' %}" alt="Profile Picture" class="profile-picture top-0 mb-3 mx-auto"> <!--position-absolute-->
                 {% endif %}
 
-                <h1 class="profile--title text-center"><i class="bi bi-journal-richtext color-mediumseagreen"></i> {{ project.name }}</h1>
+                <h1 class="profile--title text-center">{{ project.name }}</h1>
 
                 <p class="fs-6 cursor-pointer text-center"> Created {{ project.created_at|date:'m/d/Y' }} | {{ active_memberships|length }} Team Members</p>
 
-                {% if project.description %}
-                <div id="profile--bio-intro" class="mx-auto mb-4 text-center" style="max-width: 80%;">{{ project.description }}</div>
-                {% endif %}
             </div>
         </div>
         <div class="row px-5 gx-5">
@@ -65,7 +62,16 @@
                 {% include 'projects/includes/projects-nav-left.html' %}
             </div>-->
             <div class="col-12 col-md-7 py-4 d-flex flex-column">
-                <h2 class="mb-3 fs-4"><i class="bi bi-chat-square-text color-powderblue"></i> Latest Updates</h2>
+                <h2 class="mb-4 fs-4"><i class="bi bi-chat-square-text color-powderblue"></i> Project Details</h2>
+                {% if project.description %}
+
+                <div class="card">
+                  <div class="card-body">
+                      <div id="profile--bio-intro" class="p-3 text-center">{{ project.description }}</div>
+                  </div>
+                </div>
+                {% endif %}
+                <!--<h2 class="mb-3 fs-4"><i class="bi bi-chat-square-text color-powderblue"></i> Latest Updates</h2>
 
                 <div class="card my-3">
                   <div class="card-body">
@@ -90,11 +96,11 @@
                   <div class="card-footer text-body-secondary fs-7">
                     12/27/24 @ 7:57 PM EST
                   </div>
-                </div>
+                </div>-->
 
             </div>
             <div class="col-12 col-md-5 py-4 d-flex flex-column">
-                <h2 class="mb-3 fs-4"><i class="bi bi-people color-plum"></i> Team Members</h2>
+                <h2 class="mb-4 fs-4"><i class="bi bi-people color-plum"></i> Team Members</h2>
 
                 {% for membership in project.memberships.all %}
                     {% if membership.invite_status == 'accepted' or membership.invite_status == 'pending' %}
@@ -134,8 +140,8 @@
 
                 {% if project.creator == request.user %}
                 <div class="row">
-                    <div class="col-5 d-flex justify-content-start"><a href="#" class="btn btn-primary btn-sm"><i class="bi bi-eye me-0 me-md-1"></i> View All</a></div>
-                    <div class="col-7 d-flex justify-content-end"><a href="{% url 'add_member' project.id %}" class="btn btn-success btn-sm"><i class="bi bi-person-add me-0 me-md-1"></i> Invite New Member</a></div>
+                    <!--<div class="col-5 d-flex justify-content-start"><a href="#" class="btn btn-primary btn-sm"><i class="bi bi-eye me-0 me-md-1"></i> View All</a></div>-->
+                    <div class="col d-flex justify-content-end"><a href="{% url 'add_member' project.id %}" class="btn btn-outline-success btn-sm"><i class="bi bi-person-add me-0 me-md-1"></i> Invite New Member</a></div>
                 </div>
 
                 {% endif %}

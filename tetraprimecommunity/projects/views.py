@@ -1,10 +1,14 @@
+# from lib2to3.fixes.fix_input import context
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .forms import ProjectForm, EditProjectForm, AddMemberForm, EditMemberForm
-from .models import Project, ProjectMembership
+from django.contrib.auth.decorators import login_required, login_not_required
+from .forms import ProjectForm, EditProjectForm, AddMemberForm, EditMemberForm, NextActionForm, EditProjectNoteForm, CreateProjectNoteForm
+from .models import Project, ProjectMembership, NextAction, TeamMemberNote
+from .services import Planner
 from inbox.utils import create_alert, send_message_logic
+from django.db.models import F, Subquery, OuterRef, Max
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from datetime import date
 
 User = get_user_model()
 
@@ -168,6 +172,203 @@ def edit_project(request, project_id):
         form = EditProjectForm(instance=project)
 
     return render(request, 'projects/edit_project.html', {'form': form, 'project': project})
+
+
+@login_required
+def project_planner(request, project_id):
+    # TODO: add action stage filtering, etc.
+
+    # Define the mapping of action_stage to CSS classes
+    stage_classes = {
+        'progress': 'bg-success',
+        'backlog': 'bg-info',
+        'someday': 'bg-secondary',
+        'review': 'bg-warning',
+        'complete': 'bg-primary',
+        'archived': 'bg-dark',
+    }
+
+    active_memberships = request.user.project_memberships.filter(invite_status='accepted').exclude(project__creator=request.user)  # Get the user's projects
+    created_projects = request.user.created_projects.all()
+    normalized_active_memberships = [
+        membership.project for membership in active_memberships  # Normalize active_memberships to use the same structure as created_projects
+    ]
+    combined_projects = list(normalized_active_memberships) + list(created_projects)
+    user_memberships = ProjectMembership.objects.filter(user=request.user)  # Get all project memberships for the user
+    today = date.today()
+
+    if project_id != 0:
+        project = get_object_or_404(Project, id=project_id)
+        planner = Planner(project)
+
+        if request.method == 'POST' and 'add_action' in request.POST:
+            # TODO: process form with Django forms
+            title = request.POST.get('title')
+            action_stage = request.POST.get('action_stage')
+            due_date = request.POST.get('due_date')  # Fetch the field from POST data
+            due_date = due_date if due_date else None  # Check if the field has a value; set to None if empty
+            notes = request.POST.get('notes')
+
+            try:
+                assigned_to = ProjectMembership.objects.get(project=project, user=request.user)  # Get the membership for the current user and project
+            except ProjectMembership.DoesNotExist:
+                messages.error(request, 'You are not a member of this project.', 'danger')
+                return redirect('project_planner', project_id=project_id)
+
+            planner.create_action(title, action_stage, due_date, assigned_to, notes)
+
+            messages.success(request, 'Next Action created successfully!', 'success')
+
+        membership = ProjectMembership.objects.get(project=project, user=request.user)  # Get all project actions
+        selected_stage = request.POST.get("action_stage", "progress")  # default if none selected
+        project_actions = planner.get_member_actions(membership).filter(action_stage=selected_stage).order_by(F('due_date').asc(nulls_last=True), '-updated_at')
+
+        for action in project_actions:
+            action.is_due_today = action.due_date == today  # Add an 'is_due_today' flag to each action
+            action.is_overdue = action.due_date and action.due_date < today  # Add an 'is_overdue' flag
+
+        context = {'project': project, 'actions': project_actions, 'stage_classes': stage_classes, 'combined_projects': combined_projects, 'selected_stage': selected_stage, }
+
+    else:
+        selected_stage = request.POST.get("action_stage", "progress")  # default if none selected
+        actions = NextAction.objects.filter(assigned_to__in=user_memberships, action_stage=selected_stage).order_by(F('due_date').asc(nulls_last=True), '-updated_at')  # Get all actions assigned to the user's memberships
+
+        for action in actions:
+            action.is_due_today = action.due_date == today  # Add an 'is_due_today' flag to each action
+            action.is_overdue = action.due_date and action.due_date < today  # Add an 'is_overdue' flag
+
+        context = {'combined_projects': combined_projects, 'actions': actions, 'stage_classes': stage_classes, 'selected_stage': selected_stage, }
+
+    return render(request, 'projects/project_planner.html', context)
+
+
+@login_required
+def view_next_action(request, next_action_id):
+    # Fetch the NextAction object or return 404 if not found
+    next_action = get_object_or_404(NextAction, id=next_action_id)
+
+    # Pass the project ID to the template
+    project_id = next_action.project.id if next_action.project else None
+
+    # Check if the current user has permission to edit (optional, if applicable)
+    # For example, check if the user is the assigned_to or project owner
+    if request.user != next_action.assigned_to.user:
+        messages.error(request, "You don't have permission to edit this action.")
+        return redirect('project_planner', project_id)  # Replace with your All Actions page URL
+
+    # Handle POST request to update the action
+    if request.method == 'POST':
+        form = NextActionForm(request.POST, instance=next_action)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Next Action updated successfully!')
+            return redirect('project_planner', project_id)  # Redirect back to the actions list
+    else:
+        # Prepopulate the form with the NextAction data
+        form = NextActionForm(instance=next_action)
+
+    return render(request, 'projects/view_next_action.html', {'form': form, 'next_action': next_action, 'project_id': project_id, })
+
+
+@login_required
+def project_notes(request, project_id):
+    active_memberships = request.user.project_memberships.filter(invite_status='accepted').exclude(project__creator=request.user)  # Get the user's projects
+    created_projects = request.user.created_projects.all()
+    normalized_active_memberships = [
+        membership.project for membership in active_memberships  # Normalize active_memberships to use the same structure as created_projects
+    ]
+    combined_projects = list(normalized_active_memberships) + list(created_projects)
+    # user_memberships = ProjectMembership.objects.filter(user=request.user)  # Get all project memberships for the user
+
+    if project_id != 0:
+        project = get_object_or_404(Project, id=project_id)
+        planner = Planner(project)
+        membership = ProjectMembership.objects.get(project=project, user=request.user)
+        notes = planner.get_member_notes(membership).order_by('-updated_at')
+        # TODO: add notes pagination
+        context = {'project': project, 'notes': notes, 'combined_projects': combined_projects, }
+
+    else:
+        # Subquery to get the latest updated_at timestamp for each project
+        latest_notes = TeamMemberNote.objects.filter(
+            project_membership__project=OuterRef('project_membership__project')
+        ).order_by('-updated_at').values('id')[:1]
+
+        # Main query to fetch only the most recent notes
+        notes = TeamMemberNote.objects.filter(
+            id__in=Subquery(latest_notes)
+        ).order_by('-updated_at')
+        context = {'combined_projects': combined_projects, 'notes': notes, }
+
+    return render(request, 'projects/project_notes.html', context)  # TODO: optimize notes query
+
+
+@login_required
+def create_project_note(request, project_id):
+    if request.method == 'POST':
+        form = CreateProjectNoteForm(request.POST)
+        if form.is_valid():
+            project = get_object_or_404(Project, id=project_id)
+            planner = Planner(project)
+            membership = ProjectMembership.objects.get(project=project, user=request.user)
+            # TODO: ensure user has permissions to create notes in the project (try/catch)
+
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+
+            planner.add_member_note(membership, title, content)
+
+            messages.success(request, 'Project note created successfully!', 'success')
+
+            return redirect('project_notes', project_id)
+    else:
+        form = CreateProjectNoteForm()
+
+    return render(request, 'projects/create_note.html', {'form': form})
+
+
+@login_required
+def view_project_note(request, note_id):
+    project_note = get_object_or_404(TeamMemberNote, id=note_id)
+    # Pass the project ID to the template
+    project_id = project_note.project_membership.project.id if project_note.project_membership.project else None
+
+    # Check if the current user has permission to edit (optional, if applicable)
+    # For example, check if the user is the assigned_to or project owner
+    if request.user != project_note.project_membership.user:
+        messages.error(request, "You don't have permission to edit this action.")
+        return redirect('project_notes', project_id)  # Replace with your All Actions page URL
+
+    # Handle POST request to update the action
+    if request.method == 'POST':
+        form = EditProjectNoteForm(request.POST, instance=project_note)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Project note updated successfully!')
+            return redirect('project_notes', project_id)  # Redirect back to the actions list
+    else:
+        # Prepopulate the form with the NextAction data
+        form = EditProjectNoteForm(instance=project_note)
+
+    return render(request, 'projects/view_note.html', {'form': form, 'project_note': project_note, 'project_id': project_id, })
+
+
+def delete_note(request, note_id):
+    # Retrieve the project (adjust as necessary for your setup)
+    project = get_object_or_404(Project, id=request.POST.get('project_id'))
+    project_note = get_object_or_404(TeamMemberNote, id=note_id)
+    planner = Planner(project)
+
+    if request.user != project_note.project_membership.user:
+        messages.error(request, "You don't have permission delete note.")
+        return redirect('project_notes', 0)
+
+    if planner.delete_note(note_id):
+        messages.success(request, "Note deleted successfully.")
+    else:
+        messages.error(request, "Note not found.")
+
+    return redirect('project_notes', 0)
 
 
 @login_required

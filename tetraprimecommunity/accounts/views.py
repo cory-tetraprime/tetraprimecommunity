@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
+from pytz import all_timezones
 
 
 User = get_user_model()
@@ -31,7 +32,13 @@ def signup_view(request):
     else:
         form = CustomUserCreationForm()
 
-    return render(request, 'accounts/signup.html', {'form': form})
+    TIMEZONE_CHOICES = [(tz, tz) for tz in all_timezones if tz.startswith('America/')]
+    context = {
+        'form': form,
+        'TIMEZONE_CHOICES': TIMEZONE_CHOICES,
+    }
+
+    return render(request, 'accounts/signup.html', context)
 
 
 @login_required
@@ -113,10 +120,12 @@ def edit_profile_view(request):
     else:
         form = CustomUserEditForm(instance=request.user)
 
+    TIMEZONE_CHOICES = [(tz, tz) for tz in all_timezones if tz.startswith('America/')]
     context = {
         'form': form,
         'preferences': request.user.preferences,  # Add preferences to context
-        'profile_user': request.user
+        'profile_user': request.user,
+        'TIMEZONE_CHOICES': TIMEZONE_CHOICES,
     }
     return render(request, 'accounts/edit_profile.html', context)
 

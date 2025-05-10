@@ -15,6 +15,9 @@ body {
         text-decoration: none;
     }
 
+    .fs-7 { font-size: .8rem!important; }
+    .fs-8 { font-size: .6rem!important; }
+
     .btn-primary {
         background-color: #0056b3; /* New background color */
         border-color: #004085; /* New border color */
@@ -24,12 +27,6 @@ body {
     .btn-primary:hover {
         background-color: #004085; /* Darker background on hover */
         border-color: #003060; /* Darker border on hover */
-    }
-
-    @media (min-width: 1200px) {
-        header .container, main.container {
-            max-width: 960px;
-        }
     }
 
     header {
@@ -70,15 +67,15 @@ body {
         background-color: #fff;
         border-radius: 1rem;
         box-shadow: 0px -10px 12px #0000001c;
+        margin-bottom: 4rem;
         overflow: hidden;
-        margin-bottom: 100px;
 
         .profile-picture {
             border: 6px solid #fff;
             border-radius: 4rem;
             box-shadow: 0px -10px 12px #0000001c;
             height: 200px;
-            margin-top: -7rem;
+            margin-top: -9rem;
             width: 200px
 
         }
@@ -100,10 +97,15 @@ body {
                 border-radius: 100%;
             }
         }
+    }
 
-//         .bi-people-fill {
-//             color: #457dd5;
-//         }
+    .card {
+        transition: box-shadow .3s, transform .3s;
+    }
+
+    .card:hover {
+        box-shadow: 0px 10px 12px #d7d7d7;
+        transform: translate(0, -6px);
     }
 
     &.dark-mode {
@@ -114,7 +116,7 @@ body {
 
     nav {
         ul {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             list-style-type: none;
             margin: 0;
             padding: 0;
@@ -148,7 +150,7 @@ body {
 
     /* Login page */
     &.page-login main {
-        min-width: 390px;
+        /*min-width: 390px;*/
 
         ul.errorlist {
             font-size: 1rem;
@@ -211,19 +213,6 @@ body {
 
     /* Discover page */
     &.page-discover {
-
-        a.results--person .card {
-            transition: box-shadow .3s, transform .3s;
-
-            .card-body {
-                padding: .8rem 0 0 1rem;
-            }
-        }
-
-        a.results--person:hover .card {
-            box-shadow: 0px 10px 12px #d7d7d7;
-            transform: translate(0, -6px);
-        }
     }
 
 
@@ -233,19 +222,26 @@ body {
             color: green;
         }
 
-        .progress-bar {
-            background-color: orange;
+        .progress {
+            background-color: #e0e0e0;
+
+            .progress-bar {
+                background-color: orange;
+            }
         }
 
         .bi-check-circle-fill {
             color: green;
         }
 
-        .list-group-item {
+        .feature-onboarding-checklist {
+            background: #fff;
+            background: linear-gradient(180deg, rgb(234 241 253) 0%, rgb(255,255,255) 99%);
+            background-repeat: no-repeat;
+        }
 
-            &:hover {
-                background-color: #f3f3f3;
-            }
+        .list-group {
+            font-size: 1.3rem;
         }
     }
 
@@ -259,7 +255,7 @@ html.dark-mode {
 body.dark-mode {
     background-color: #161616;
     background: linear-gradient(180deg, rgb(179,200,233) 0%, rgb(22,22,22) 60%);
-    color: #e0e0e0;
+    color: #b9b9b9;
 
     main {
 
@@ -267,27 +263,65 @@ body.dark-mode {
             color: #e0e0e0;
         }
 
+        select {
+            background-color: #161616;
+            color: #b9b9b9;
+        }
+
         .profile-picture {
             border: 6px solid #555;
         }
+
+        .card:hover {
+            box-shadow: 0px 10px 12px #333;
+        }
     }
 
-    .accordion-button {
+    .card {
         background-color: #161616;
+        border-color: #555;
+        color: #b9b9b9;
+
+        .card-title, .card-body, .card-footer, .text-body-secondary {
+            color: #b9b9b9;
+        }
     }
 
-    &.page-user-profile .accordion-item {
-        background-color: #161616;
+    .form-control, .form-select {
+        background-color: #222;
+        border-color: #444;
         color: #e0e0e0;
     }
 
-    &.page-user-profile .accordion-button:not(.collapsed) {
+    .accordion {
         background-color: #161616;
-        color: #e0e0e0;
-    }
+        border-color: #555;
+        color: #b9b9b9;
 
-    .accordion-button:not(.collapsed) {
-        box-shadow: none;
+        .accordion-body {
+            background-color: #161616;
+            color: #b9b9b9 !important;
+        }
+
+        .accordion-item {
+            background-color: #161616;
+            border-color: #222;
+            color: #999;
+        }
+
+        .accordion-button {
+            background-color: #161616;
+            border-color: #222;
+            color: #b9b9b9;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: #161616;
+            box-shadow: none;
+            color: #b9b9b9;
+            box-shadow: inset 0px -1px 0px #222;
+
+        }
     }
 
     .header--userdropdown {
@@ -315,36 +349,17 @@ body.dark-mode {
             border-color: #555;
             color: #e0e0e0;
         }
-
-        a.results--person:hover .card {
-            box-shadow: 0px 10px 12px #333;
-        }
     }
 
     &.page-edit-profile {
-
-        .form-control, .form-select {
-            background-color: #222;
-            border-color: #444;
-            color: #e0e0e0;
-        }
-
-        .accordion-item {
-            background-color: #161616;
-            border-color: #222;
-            color: #999;
-        }
-
-        .accordion-button {
-            color: #777;
-        }
-
-        .accordion-button:not(.collapsed) {
-            color: #e0e0e0;
-        }
     }
 
     #feature-onboarding {
+        .feature-onboarding-checklist {
+            background: #161616;
+            background: linear-gradient(180deg, rgb(25, 36, 54) 0%, rgb(22, 22, 22) 99%);
+            background-repeat: no-repeat;
+        }
 
         .list-group-item {
             background-color: #161616;
@@ -367,4 +382,44 @@ body.dark-mode {
 }
 
 
+/* Responsive */
+
+@media (min-width: 1200px) {
+    body {
+        header, main {
+            max-width: 960px;
+        }
+    }
+}
+
+@media (max-width: 960px) {
+    body {
+        header, main {
+            max-width: 96%;
+        }
+    }
+}
+
+@media screen and (max-width: 576px) {
+    body {
+        /* Feature - Onboarding */
+        #feature-onboarding {
+            .list-group {
+                font-size: 1rem;
+            }
+        }
+    }
+}
+
 @import 'colors';
+
+
+/* BREAKPOINTS =
+    Class               infix	    Dimensions
+    Extra small	        None	    <576px
+    Small	            sm	        ≥576px
+    Medium	            md	        ≥768px
+    Large	            lg	        ≥992px
+    Extra large	        xl	        ≥1200px
+    Extra extra large   xxl	        ≥1400px
+*/

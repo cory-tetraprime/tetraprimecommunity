@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Page not found{% endblock %}
+{% block title %}404 Page Not Found{% endblock %}
 
-{% block body_class %}template-404{% endblock %}
+{% block body_class %}template-404 bg-dark d-flex align-items-center justify-content-center vh-100{% endblock %}
 
 {% block content %}
-<h1>Page not found</h1>
-
-<h2>Sorry, this page could not be found.</h2>
+  <div class="container text-center">
+    <h1 class="display-3 fw-bold">Four Oh Four</h1>
+    <p class="lead"><em>Error code: <strong>0x404-social-fail</strong></em></p>
+    <a href="/" class="btn btn-outline-success mt-3">Return to Home</a>
+  </div>
 {% endblock %}

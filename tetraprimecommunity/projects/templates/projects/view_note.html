@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% load preferences_filters %}
+
+{% block title %}Project Notes{% endblock %}
+{% block body_class %}page-project-notes{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container-fluid">
+    <div class="col">
+        <div class="row">
+            <div class="col-12 p-4 px-md-5 mt-3">
+                <h1 class="text-center"><i class="bi bi-file-text color-mediumseagreen"></i> Project Notes</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 p-4 d-none d-md-flex">
+                {% include 'projects/includes/projects-nav-left.html' %}
+            </div>
+            <div class="col px-4 px-md-5 py-4 d-flex flex-column">
+                <h2 class="mb-3">Note Details</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <a href="{% url 'project_notes' project_id %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col d-flex justify-content-end">
+                            <a href="{% url 'delete_note' project_note.id %}" class="btn btn-link btn-sm color-red">Delete</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

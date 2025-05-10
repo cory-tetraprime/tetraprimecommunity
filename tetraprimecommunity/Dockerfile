@@ -47,6 +47,7 @@ USER wagtail
 
 # Collect static files.
 # RUN python manage.py collectstatic --noinput --clear
+# NOTE: collectstatic is ran at Heroku bash because it requires the KEY to be defined
 
 # Runtime command that executes when "docker run" is called, it does the
 # following:

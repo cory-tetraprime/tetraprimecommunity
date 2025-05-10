@@ -93,3 +93,44 @@ class ProjectMembership(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.project.name} ({self.get_invite_status_display()})"
+
+
+class TeamMemberNote(models.Model):
+    project_membership = models.ForeignKey(
+        ProjectMembership, on_delete=models.CASCADE, related_name='notes'
+    )
+    title = models.CharField(max_length=50)
+    content = models.TextField(max_length=1000)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    # TODO: add published status
+
+    def __str__(self):
+        return f"Note for {self.project_membership.user.username}: {self.title}"
+
+
+class NextAction(models.Model):
+    STAGE_CHOICES = [
+        ('someday', 'Someday'),
+        ('backlog', 'Backlog'),
+        ('progress', 'In Progress'),
+        ('review', 'In Review'),
+        ('complete', 'Complete'),
+        ('archived', 'Archived'),
+    ]
+
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name='actions'
+    )
+    assigned_to = models.ForeignKey(
+        ProjectMembership, on_delete=models.CASCADE, related_name='actions', null=True, blank=True
+    )
+    title = models.CharField(max_length=50)
+    action_stage = models.CharField(max_length=15, choices=STAGE_CHOICES)
+    due_date = models.DateField(null=True, blank=True)
+    notes = models.TextField(max_length=500, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Action: {self.title} ({self.get_action_stage_display()})"

@@ -6,7 +6,7 @@
                 <img class="header--logo-40" src="{% static 'img/TPC Logo  --v1 --200px.png' %}" loading="lazy">
             </a>
 
-            <ul class="nav col d-flex ms-md-2 me-lg-auto mb-2 mb-md-0">
+            <ul role="menu" class="nav col d-flex ms-md-2 me-lg-auto mb-2 mb-md-0">
                 <li class="me-md-5"><strong><span class="d-none d-lg-block">Tetra Prime Community</span><span class="d-block d-lg-none">TPC</span></strong></li>
                 <li class="d-none d-md-block"><a href="{% url 'profile' %}" class="pe-5"><i class="bi bi-person-vcard me-1"></i> Your Profile</a></li>
                 <li class="d-none d-md-block"><a href="{% url 'discover' %}" class="pe-5"><i class="bi bi-people-fill me-1"></i> Discover</a></li>
@@ -18,7 +18,7 @@
             </form>-->
 
             <!-- Dropdown nav -->
-            <div class="dropdown text-end">
+            <div role="menu" title="Navigation Menu" class="dropdown text-end">
                 {% if unread_counts.unread_total %}<span class="position-absolute top-0 start-0 translate-middle p-1 bg-success border border-light rounded-circle"><span class="visually-hidden">New alerts</span></span>{% endif %}
                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                    data-bs-toggle="dropdown" aria-expanded="false">

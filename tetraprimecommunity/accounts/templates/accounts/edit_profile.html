@@ -47,7 +47,6 @@
                 {% else %}
                 <img src="{% static 'custom/images/user-pfp-generic.png' %}" alt="Profile Picture" class="profile-picture align-self-center mb-5">
                 {% endif %}
-    <!--            <h1 class="text-center mb-4">Edit Profile</h1>-->
                 <h1 class="fs-2 mb-5 text-center"><i class="bi bi-person-vcard"></i> Profile Basics</h1>
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -78,7 +77,18 @@
                             {{ form.country }}
                             {{ form.country.errors }}
                         </div>
-                        <div class="col-12 mb-5">
+                        <div class="col-md-6 mb-5">
+                            <label for="id_timezone" class="form-label">Timezone*</label>
+                            <!--{{ form.timezone }}-->
+                            <select required id="id_timezone" name="timezone" class="form-select">
+                                <option value="" selected>Select your timezone</option>
+                                {% for tz, label in TIMEZONE_CHOICES %}
+                                    <option value="{{ tz }}" {% if tz == profile_user.timezone %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            {{ form.timezone.errors }}
+                        </div>
+                        <div class="col-12 mb-4">
                             <label for="id_bio_intro" class="form-label">Profile Intro <span class="fw-normal fs-6"><em>(<span id="bio_intro_counter">500</span> characters remaining)</em></span></label>
                             {{ form.bio_intro }}
                             {{ form.bio_intro.errors }}
@@ -98,7 +108,11 @@
                                 }
                             });
                         </script>
-                        <div class="col-md-4 mb-5">
+                        <div class="mt-1 mb-5 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-outline-success w-auto"><i class="bi bi-floppy-fill"></i> Save Profile</button>
+                        </div>
+                        <hr>
+                        <div class="col-md-4 mt-5 mb-5">
                             <h2 class="form-label fs-3">Profile Picture</h2>
                             <p><i class="bi bi-exclamation-triangle color-orange"></i> Must be under 600kb</p>
                             <div class="mt-1 mb-2">
@@ -131,7 +145,7 @@
                                 <div style="background-color: #999; border-radius: 50%; height: 50px; width: 50px;"></div>
                             </div>-->
                         </div>
-                        <div class="col-md-6 offset-md-2 mb-5">
+                        <div class="col-md-6 mt-5 offset-md-2 mb-5">
                             <h2 class="form-label fs-3">Profile Banner</h2>
                             <p><i class="bi bi-exclamation-triangle color-orange"></i> Must be under 600kb</p>
                             <div class="mt-1 mb-2">

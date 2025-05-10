@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+{% load preferences_filters %}
+
+{% block title %}Project Planner{% endblock %}
+{% block body_class %}page-project-planner{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container-fluid">
+    <div class="col">
+        <div class="row">
+            <div class="col-12 p-4 px-md-5 mt-3">
+                <h1 class="text-center"><i class="bi bi-file-text color-mediumseagreen"></i> Project Notes</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 p-4 d-none d-md-flex">
+                {% include 'projects/includes/projects-nav-left.html' %}
+            </div>
+            <div class="col px-4 px-md-5 py-4 d-flex flex-column">
+                <label for="project_select" class="fw-bold mb-1">{{ notes|length }} Notes / {{ combined_projects|length }} Active Projects:</label>
+                <div class="d-flex align-items-center">
+                    <!-- Select Dropdown -->
+                    <div class="flex-grow-1">
+                        <select name="project_select" id="project_select" class="form-select fs-5" style="border-left: 4px solid mediumseagreen;">
+                            <option value="0" selected>All Projects</option>
+                            {% for project in combined_projects %}
+                            <option value="{{ project.id }}">{{ project.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="ms-3">
+                        <button type="button" class="btn btn-primary" onclick="navigateToPlanner()">Select</button>
+                    </div>
+                </div>
+                <script>
+                    function navigateToPlanner() {
+                        // Get the selected value from the dropdown
+                        const selectElement = document.getElementById('project_select');
+                        const selectedValue = selectElement.value;
+
+                        // Redirect to the constructed URL if a valid option is selected
+                        if (selectedValue && selectedValue !== "All Projects") {
+                            window.location.href = `/projects/${selectedValue}/notes/`;
+                        } else {
+                            alert('Please select a valid project.');
+                        }
+                    }
+                </script>
+                <hr>
+                {% if project %}
+                <br>
+                <h2 class="mb-3">{{ project.name }}</h2>
+                <div><a href="{% url 'create_project_note' project.id %}" class="btn btn-outline-success"><i class="bi bi-file-earmark-plus me-1"></i> Create New Note</a></div>
+                {% endif %}
+
+                {% if project %}
+                <h3 class="mt-5 mb-4">{{ notes|length }} Project Notes:</h3>
+                {% else %}
+                <h3 class="mt-4 mb-4">Latest Updated Notes:</h3>
+                {% endif %}
+
+                {% if notes %}
+                    {% for note_item in notes %}
+                    <div class="card mb-5 position-relative">
+                        <div class="card-body p-4">
+                            <h4 class="card-title">{{ note_item.title }}</h4>
+                            <p class="card-text">{{ note_item.content|truncatewords:28 }}</p>
+                            <div class="row">
+                                <div class="col">
+                                    <p class="card-text mb-1 text-secondary">Project: {{ note_item.project_membership.project.name }}</p>
+                                    <!--<p class="card-text mb-1">Assigned: @{{ note_item.assigned_to.user }}</p>-->
+                                    <p class="card-text text-secondary">Updated: {{ note_item.updated_at }}</p>
+                                </div>
+                                <div class="col d-flex justify-content-end align-items-end">
+                                    <a href="{% url 'view_project_note' note_item.id %}" class="btn btn-outline-secondary btn-sm" aria-label="View note {{ note_item.id }} details"><i class="bi bi-eye me-1"></i> View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,10 +1,8 @@
-from cProfile import label
-
 from django import forms
 from django.contrib.auth import get_user_model
 from wagtail.users.forms import UserEditForm, UserCreationForm
 from django.utils.translation import gettext_lazy as _
-from .models import CustomUser
+from pytz import all_timezones
 
 User = get_user_model()
 
@@ -16,7 +14,6 @@ class CustomUserEditForm(UserEditForm):
     COUNTRY_CHOICES = [
         ('', 'Select your country'),  # Default blank option
         ('US', 'United States'),
-        ('CA', 'Canada'),
         ('00', 'Other'),
     ]
     country = forms.ChoiceField(
@@ -25,7 +22,13 @@ class CustomUserEditForm(UserEditForm):
         required=True,
         label=_("Country")
     )
-    # country = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'rows': 3}), required=True, label=_("Country"))
+    TIMEZONE_CHOICES = [(tz, tz) for tz in all_timezones if tz.startswith('America/')]
+    timezone = forms.ChoiceField(
+        choices=TIMEZONE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+        label=_("Timezone")
+    )
     profile_picture = forms.ImageField(required=False)
     banner_image = forms.ImageField(required=False)
     bio_intro = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}), label=_("Bio Intro"), max_length=500, required=False)
@@ -48,7 +51,7 @@ class CustomUserEditForm(UserEditForm):
 
     class Meta(UserEditForm.Meta):
         model = User
-        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'country', 'profile_picture', 'banner_image']  # Add fields you want to edit
+        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'country', 'profile_picture', 'banner_image', 'timezone']  # Add fields you want to edit
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -107,7 +110,6 @@ class CustomUserCreationForm(UserCreationForm):
     COUNTRY_CHOICES = [
         ('', 'Select your country'),  # Default blank option
         ('US', 'United States'),
-        ('CA', 'Canada'),
         ('00', 'Other'),
     ]
     country = forms.ChoiceField(
@@ -117,12 +119,18 @@ class CustomUserCreationForm(UserCreationForm):
         label=_("Country"),
         initial='US'
     )
-    # country = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}), required=True, label=_("Country"))
+    TIMEZONE_CHOICES = [(tz, tz) for tz in all_timezones if tz.startswith('America/')]
+    timezone = forms.ChoiceField(
+        choices=TIMEZONE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+        label=_("Timezone")
+    )
     invite_code = forms.CharField(max_length=100, required=True, help_text="Enter your invite code.", widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'country']
+        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'country', 'timezone']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
         }

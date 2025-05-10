@@ -77,6 +77,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'accounts.middleware.CustomTimezoneMiddleware',
 ]
 
 ROOT_URLCONF = "tetraprimecommunity.urls"
@@ -203,13 +204,13 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
-            'level': 'DEBUG',  # You can change this to INFO or any other level
+            'level': 'DEBUG',  # Keep this if you want detailed output during development
             'class': 'logging.StreamHandler',
         },
     },
     'root': {
         'handlers': ['console'],
-        'level': 'DEBUG',
+        'level': 'INFO',  # Change from DEBUG to INFO or WARNING to reduce overall verbosity
     },
     'loggers': {
         'django': {
@@ -225,6 +226,22 @@ LOGGING = {
         'accounts': {
             'handlers': ['console'],
             'level': 'DEBUG',
+            'propagate': False,
+        },
+        # 🔻 Add these to suppress boto noise:
+        'boto3': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'botocore': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        's3transfer': {
+            'handlers': ['console'],
+            'level': 'WARNING',
             'propagate': False,
         },
     },

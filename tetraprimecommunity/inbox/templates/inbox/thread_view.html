@@ -28,7 +28,7 @@
                 </h2>
                 <p class="mb-3">Started on: <br>{{ parent_message.sent_at }}</p>
                 <p class="mb-5">Messages: {{ thread_messages|length }}</p>
-                <p><a href="{% url 'inbox' %}" class="btn btn-outline-primary btn-sm">Return to Inbox</a></p>
+                <p><a href="{% url 'inbox' %}" class="btn btn-outline-secondary btn-sm">Return to Inbox</a></p>
             </div>
             <div class="col px-5 py-4 d-flex flex-column">
                 {% if parent_message.subject %}<h2 class="fs-4 mb-1">{{ parent_message.subject }}</h2>{% endif %}
@@ -36,10 +36,9 @@
                 <div class="thread-view d-flex flex-column">
                 {% for message in thread_messages %}
                     <style>.message p:last-of-type { margin-bottom: 0; }</style>
-                    <div class="message mb-5 w-75 position-relative {% if request.user == message.sender %}text-end align-self-end{% endif %}" style="background: rgba(0, 0, 0, 10%); border: 1px solid #e0e0e0; border-radius: 1.4rem; padding: 1rem; {% if request.user == message.sender %}border-bottom-right-radius: 0;{% else %}background: rgba(255, 255, 255, 20%); border-bottom-left-radius: 0;{% endif %}">
-                        <!--<p class="fs-7">@{{ message.sender.username }} says...</p>-->
+                    <div class="message mb-5 w-75 p-3 rounded-top rounded-end position-relative {% if request.user == message.sender %}bg-outline-powderblue text-end align-self-end rounded-start{% else %}bg-outline-lightgray rounded-bottom{% endif %}">
                         {{ message.body|linebreaks }}
-                        <span class="fs-7 m-0 position-absolute color-lightgray" style="right: 0; bottom: -22px;">{{ message.sent_at|date:"M d, Y P" }}</span>
+                        <span class="fs-7 m-0 position-absolute {% if request.user == message.sender %}color-lightblue{% else %}text-secondary{% endif %}" style="{% if request.user == message.sender %}right: 0;{% else %}left: 0;{% endif %} bottom: -24px;">@{{ message.sender.username }} | {{ message.sent_at|date:"M d, Y P" }}</span>
                     </div>
                 {% endfor %}
 

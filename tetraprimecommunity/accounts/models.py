@@ -2,6 +2,8 @@ from typing import Dict, Any
 from django.db import models
 from typing import TYPE_CHECKING
 from django.contrib.auth.models import AbstractUser
+from django.utils.timezone import get_current_timezone_name
+from pytz import all_timezones
 from django.conf import settings
 from django.db.models import Manager
 from django.utils.functional import empty
@@ -59,6 +61,12 @@ class CustomUser(AbstractUser):
     profile_picture = models.ImageField(upload_to='users/profile_pictures/', blank=True, null=True, validators=[validate_image_file_type, validate_image_file_size])
     banner_image = models.ImageField(upload_to='users/banner_images/', blank=True, null=True, validators=[validate_image_file_type, validate_image_file_size])
     preferences = models.JSONField(default=get_default_preferences, blank=True)
+    timezone = models.CharField(
+        verbose_name='timezone',
+        max_length=50,
+        choices=[(tz, tz) for tz in all_timezones],  # Generates a list of tuples for all available timezones
+        default=get_current_timezone_name  # Set a default value to the user's current timezone
+    )
 
     def set_preference(self, key, value):
         """Set a user preference."""
@@ -74,6 +82,9 @@ class CustomUser(AbstractUser):
         if key in self.preferences:
             del self.preferences[key]
             self.save()
+
+    def __str__(self):
+        return self.username
 
     def profile_completion_status(self):
         """Calculate profile completion percentage and missing fields."""

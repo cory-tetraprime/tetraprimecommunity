@@ -109,7 +109,7 @@ def add_member(request, project_id):
                     # )
 
                     # Get the invite message
-                    invite_message = form.cleaned_data.get('invite_message', 'Greetings, you have been invited! Please review the Your Projects page. Thank you!')
+                    invite_message = form.cleaned_data.get('invite_message', 'Greetings, you have been invited! Please review open invites on your Projects page. Thank you!')
 
                     sender = request.user
                     receiver_username = user.username

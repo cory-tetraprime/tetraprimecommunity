@@ -18,7 +18,7 @@
             </form>-->
 
             <!-- Dropdown nav -->
-            <div role="menu" title="Navigation Menu" class="dropdown text-end">
+            <div role="menu" class="dropdown text-end">
                 {% if unread_counts.unread_total %}<span class="position-absolute top-0 start-0 translate-middle p-1 bg-success border border-light rounded-circle"><span class="visually-hidden">New alerts</span></span>{% endif %}
                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                    data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,7 +28,7 @@
                     <img src="{% static 'custom/images/user-pfp-generic.png' %}" alt="mdo" width="32" height="32" class="rounded-3">
                     {% endif %}
                 </a>
-                <ul class="header--userdropdown dropdown-menu text-small" style="">
+                <ul class="header--userdropdown dropdown-menu text-small">
                     <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i> Profile</a></li>
                     <li><a class="dropdown-item" href="{% url 'my_projects' %}"><i class="bi bi-journals me-1"></i> Projects</a></li>
                     <li class="position-relative"><a class="dropdown-item" href="{% url 'inbox' %}"><i class="bi bi-envelope-exclamation me-1"></i> Messages {% if unread_counts.unread_total %}<span class="badge rounded-pill bg-success ms-1" style="" title="{{ unread_counts.unread_total }} Unread">{{ unread_counts.unread_total }}</span>{% endif %}</a></li>

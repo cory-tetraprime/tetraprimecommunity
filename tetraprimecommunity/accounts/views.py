@@ -10,6 +10,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import JsonResponse
+from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 from pytz import all_timezones
@@ -151,6 +153,15 @@ def profile_checklist(request):
     user = request.user
     status = user.profile_completion_status()
     return render(request, 'templates/accounts/includes/onboard-new-user.html', {'status': status, 'user': user})
+
+
+def username_search(request):
+    query = request.GET.get('q', '')
+    if query:
+        users = User.objects.filter(username__icontains=query)[:10]
+        usernames = list(users.values_list('username', flat=True))
+        return JsonResponse({'results': usernames})
+    return JsonResponse({'results': []})
 
 
 class UserPreferencesView(APIView):

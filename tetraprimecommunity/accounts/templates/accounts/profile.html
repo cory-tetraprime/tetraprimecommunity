@@ -26,6 +26,12 @@
                     <!--<div class="col-auto"><span id="user&#45;&#45;info-cookies">1</span> <i class="bi bi-cookie" title="Cookies"></i></div>-->
                     {% endif %}
 
+                    {% if user != request.user %}
+                    <div class="col-auto d-flex justify-content-start">
+                        <a href="{% url 'inbox_with_user' user.username %}" class="btn btn-outline-success btn-sm" title="Send message to {{ user.username }}"><i class="bi bi-envelope-at"></i> <span class="d-none d-md-inline">Message</span></a>
+                    </div>
+                    {% endif %}
+
                     <!--<div class="col-auto"><span id="user&#45;&#45;info-connects">0</span> <i class="bi bi-people-fill" title="Connections"></i></div>-->
                     <!--<a href="https://tetraprime.community/accounts/profile/@{{ user.username }}" class="btn btn-outline-primary btn-sm"><i class="bi bi-share" title="Share Profile"></i></a>-->
 
@@ -42,11 +48,10 @@
                     </div>
                     {% endif %}
 
-
                     {% if user != request.user %}
-                    <!--<div class="col-auto d-flex justify-content-end">
-                        <a href="#follow" class="btn btn-outline-primary btn-sm"><i class="bi bi-people-fill" title="Connections"></i> Connect</a>
-                    </div>-->
+<!--                    <div class="col d-flex justify-content-end">-->
+<!--                        <a href="{% url 'inbox_with_user' user.username %}" class="btn btn-outline-primary btn-sm" title="Connect with {{ user.username }}"><i class="bi bi-person-plus"></i> <span class="d-none d-md-inline">Connect</span></a>-->
+<!--                    </div>-->
                     {% endif %}
                 </div>
 
@@ -231,18 +236,6 @@
 
                 <div id="feature-activity-feed" class="mt-5"></div>
             </div>
-            <!--<div class="col col-md-3 p-4">
-                <div class="row">
-                    <div class="d-flex align-items-center">
-                        <input id="field&#45;&#45;whatsnew" class="form-control me-2" type="text" placeholder="What are you curious about?">
-                        <button class="btn btn-outline-secondary" type="submit">&gt;</button>
-                    </div>
-                </div>
-                <hr>
-                <div>
-                    <p>Coming soon...</p>
-                </div>
-            </div>-->
         </div>
     </div>
 </main>

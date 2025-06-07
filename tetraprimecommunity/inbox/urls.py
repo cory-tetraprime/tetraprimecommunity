@@ -2,7 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('messages/', views.inbox, name='inbox'),
+    # path('messages/<str:user_name>', views.inbox, name='inbox'),
+    path('messages/', views.inbox, name='inbox'),  # No username
+    path('messages/<str:user_name>/', views.inbox, name='inbox_with_user'),  # With username
+
     path('message/<int:message_id>/', views.read_message, name='read_message'),
     path('alert/<int:alert_id>/', views.read_alert, name='read_alert'),
     path('send_message/', views.send_message, name='send_message'),

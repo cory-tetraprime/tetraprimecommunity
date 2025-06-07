@@ -18,14 +18,13 @@
         </div>
         <div class="row">
             <div class="col col-md-4 ps-5 pe-3 py-4 d-none d-md-flex flex-column">
-                <h2 class="mb-1 fs-4">
-                    <div class="fs-4 mb-3"><i class="bi bi-people color-green"></i> Participants:</div>
-                    {% if request.user == parent_message.sender %}
-                    <div class="mb-3 color-dodgerblue">@{{ parent_message.sender }}<br>@{{ parent_message.receiver }}</div>
-                    {% else %}
-                    <div class="mb-3 color-dodgerblue">@{{ parent_message.receiver }}<br>@{{ parent_message.sender }}</div>
-                    {% endif %}
-                </h2>
+                <h2 class="mb-3 fs-5"><i class="bi bi-people color-green"></i> Participants:</h2>
+                {% if request.user == parent_message.sender %}
+                <h3 class="mb-3 fs-4 color-dodgerblue">@{{ parent_message.sender }}<br>@{{ parent_message.receiver }}</h3>
+                {% else %}
+                <h3 class="mb-3 fs-4 color-dodgerblue">@{{ parent_message.receiver }}<br>@{{ parent_message.sender }}</h3>
+                {% endif %}
+
                 <p class="mb-3">Started on: <br>{{ parent_message.sent_at }}</p>
                 <p class="mb-5">Messages: {{ thread_messages|length }}</p>
                 <p><a href="{% url 'inbox' %}" class="btn btn-outline-secondary btn-sm">Return to Inbox</a></p>

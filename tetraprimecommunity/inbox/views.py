@@ -16,9 +16,10 @@ CustomUser = get_user_model()
 
 
 @login_required
-def inbox(request):
+def inbox(request, user_name=None):
     # Initialize both forms
     message_form = WriteNewMessageForm(prefix='message')
+    message_to = user_name or ""
 
     # Fetch latest messages by thread for received messages
     received_messages = (
@@ -134,7 +135,7 @@ def inbox(request):
     # Sort combined items by latest_message_time
     sorted_items = sorted(combined_items, key=lambda x: x.get('latest_message_time', None), reverse=True)
 
-    return render(request, 'inbox/inbox.html', {'items': sorted_items, 'message_form': message_form})
+    return render(request, 'inbox/inbox.html', {'items': sorted_items, 'message_form': message_form, 'message_to': message_to})
 
 
 @login_required

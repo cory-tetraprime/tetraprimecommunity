@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+{% load preferences_filters %}
+
+{% block title %}Discover People{% endblock %}
+{% block body_class %}page-discover{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container-fluid">
+    <div class="col">
+        <div class="row">
+            <div class="col p-4 px-md-5 d-flex flex-column mt-3">
+                <h1 class="text-center mb-5"><i class="bi bi-people color-mediumseagreen"></i> Discover People</h1>
+                <div class="row mb-4 px-2">
+                    <div class="col-6 text-start"><em>{{ active_users_len }} Community Members</em></div>
+                    <div class="col-6 text-end"><em>Ordered by Date Joined</em></div>
+                </div>
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for user in page_obj.object_list %}
+                    <div class="col">
+                        <a href="{% url 'profile_user' username=user.username %}" class="results--person">
+                            <div class="card">
+                                {% if user.is_staff %}
+                                <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-blue" style="right: 10px;">TCP Staff</span>
+                                {% endif %}
+                                  <div class="row g-0">
+                                    <div class="col-3">
+                                    {% if user.profile_picture %}
+                                        <img src="{{ user.profile_picture.url }}" class="img-fluid rounded-start" alt="{{ user.username }}'s avatar">
+                                    {% else %}
+                                        <img src="{% static 'custom/images/user-pfp-generic.png' %}" class="img-fluid rounded-start" alt="Avatar">
+                                    {% endif %}
+                                    </div>
+                                    <div class="col-9 d-flex align-items-center">
+                                      <div class="card-body p-0 ps-3">
+                                        <h5 class="card-title mb-1">{{ user.first_name }} {{ user.last_name }}</h5>
+                                        <!--<p class="card-text mb-0">@{{ user.username }}</p>-->
+                                        {% if user|get_preference:'bio_current_professional_title' %}
+                                        <p class="card-text mb-0">{{ user|get_preference:'bio_current_professional_title' }}</p>
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="row pagination d-flex mt-4 justify-content-center fw-bold">
+                    <div class="col-4 page-previous text-end">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1" class="btn btn-outline-secondary btn-sm mx-1">&laquo; First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-secondary btn-sm mx-1">Previous</a>
+                    {% endif %}
+                    </div>
+                    <div class="col-4 current text-center">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </div>
+                    <div class="col-4 page-next text-start">
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-secondary btn-sm mx-1">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-secondary btn-sm mx-1">Last &raquo;</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col p-4 px-md-5 d-flex flex-column mt-3">
+                <h1 class="text-center mb-5"><i class="bi bi-journals color-mediumseagreen"></i> Discover Projects</h1>
+                <div class="row mb-4 px-2">
+                    <div class="col-6 text-start"><em>{{ active_projects|length }} Community Projects</em></div>
+                    <div class="col-6 text-end"><em>Ordered by Last Updated</em></div>
+                </div>
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for project in active_projects %}
+                    <div class="col">
+                        <a href="{% url 'project_detail' project.id %}" class="results--project">
+                            <div class="card">
+                                {% if project.creator == request.user %}
+                                <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-blue" style="right: 10px;">Yours</span>
+                                {% endif %}
+                                  <div class="row g-0">
+                                    <div class="col-3">
+                                    {% if project.profile_picture %}
+                                        <img src="{{ project.profile_picture.url }}" class="img-fluid rounded-start" alt="Avatar image for {{ project.name }}">
+                                    {% else %}
+                                        <img src="{% static 'custom/images/project-pfp-generic.jpg' %}" class="img-fluid rounded-start" alt="Avatar image for this project.">
+                                    {% endif %}
+                                    </div>
+                                    <div class="col-9 d-flex align-items-center">
+                                      <div class="card-body p-0 ps-3">
+                                        <h5 class="card-title mb-1">{{ project.name }}</h5>
+                                        <p class="card-text mb-0">{{ project.description|truncatechars:44 }} <em>Learn More</em></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
+                <div class="row my-4 px-2">
+                    <div class="col text-center fw-bold">Showing Latest 10</div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="row">
+            <h2>Active Projects</h2>
+            <ul>
+                {% for project in active_projects %}
+                    <li>
+                        <a href="{% url 'project_detail' project.id %}">{{ project.name }}</a> - {{ project.get_visibility_display }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>-->
+    </div>
+</main>
+{% endblock %}

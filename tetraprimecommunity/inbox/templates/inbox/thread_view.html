@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% load preferences_filters %}
+
+{% block title %}Your Messages & Alerts{% endblock %}
+{% block body_class %}page-inbox-messages{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container-fluid">
+    <div class="col">
+        <div class="row">
+            <div class="col-12 p-4 px-md-5 mt-3">
+                <h1 class="text-center"><i class="bi bi-envelope-exclamation color-mediumseagreen"></i> Messages</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-4 ps-5 pe-3 py-4 d-none d-md-flex flex-column">
+                <h2 class="mb-3 fs-5"><i class="bi bi-people color-green"></i> Participants:</h2>
+                {% if request.user == parent_message.sender %}
+                <h3 class="mb-3 fs-4 color-dodgerblue">@{{ parent_message.sender }}<br>@{{ parent_message.receiver }}</h3>
+                {% else %}
+                <h3 class="mb-3 fs-4 color-dodgerblue">@{{ parent_message.receiver }}<br>@{{ parent_message.sender }}</h3>
+                {% endif %}
+
+                <p class="mb-3">Started on: <br>{{ parent_message.sent_at }}</p>
+                <p class="mb-5">Messages: {{ thread_messages|length }}</p>
+                <p><a href="{% url 'inbox' %}" class="btn btn-outline-secondary btn-sm">Return to Inbox</a></p>
+            </div>
+            <div class="col px-5 py-4 d-flex flex-column">
+                {% if parent_message.subject %}<h2 class="fs-4 mb-1">{{ parent_message.subject }}</h2>{% endif %}
+                <hr>
+                <div class="thread-view d-flex flex-column">
+                {% for message in thread_messages %}
+                    <style>.message p:last-of-type { margin-bottom: 0; }</style>
+                    <div class="message mb-5 w-75 p-3 rounded-top rounded-end position-relative {% if request.user == message.sender %}bg-outline-powderblue text-end align-self-end rounded-start{% else %}bg-outline-lightgray rounded-bottom{% endif %}">
+                        {{ message.body|linebreaks }}
+                        <span class="fs-7 m-0 position-absolute {% if request.user == message.sender %}color-lightblue{% else %}text-secondary{% endif %}" style="{% if request.user == message.sender %}right: 0;{% else %}left: 0;{% endif %} bottom: -24px;">@{{ message.sender.username }} | {{ message.sent_at|date:"M d, Y P" }}</span>
+                    </div>
+                {% endfor %}
+
+                <br>
+                <hr>
+                <!-- Reply Form -->
+                <div class="reply-form">
+                    <form method="post">
+                        {% csrf_token %}
+                        <label for="body" class="visually-hidden">Your Reply:</label>
+                        <textarea name="body" id="body" rows="3" required placeholder="Your reply..." class="form-control mb-3"></textarea>
+                        <button type="submit" class="btn btn-primary">Send Reply</button>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

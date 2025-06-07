@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+{% load preferences_filters %}
+
+{% block title %}My Projects{% endblock %}
+{% block body_class %}page-my-projects{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container-fluid">
+    <div class="col">
+        <div class="row">
+            <div class="col-12 p-4 px-md-5 mt-3">
+                <h1 class="text-center"><i class="bi bi-journals color-mediumseagreen"></i> My Projects</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 p-4 d-none d-md-flex">
+                {% include 'projects/includes/projects-nav-left.html' %}
+            </div>
+            <div class="col px-5 py-4 d-flex flex-column">
+
+                <h2 class="mb-4">Created Projects</h2>
+                <div class="row row-cols-1 row-cols-md-1 g-4">
+                <!-- TODO: Add pagination -->
+                {% for project in created_projects %}
+                    <div class="col">
+                        <a href="{% url 'project_detail' project.id %}" class="results--person">
+                            <div class="card">
+                              <div class="row g-0">
+                                <div class="col-2 p-2">
+                                {% if project.profile_picture %}
+                                    <img src="{{ project.profile_picture.url }}" class="img-fluid rounded" alt="Avatar image for {{ project.name }}">
+                                {% else %}
+                                    <img src="{% static 'custom/images/project-pfp-generic.jpg' %}" class="img-fluid rounded" alt="Avatar image for this project.">
+                                {% endif %}
+                                </div>
+                                <div class="col-10 p-3 ps-2 d-flex align-items-center">
+                                  <div class="card-body p-0">
+                                    <h5 class="card-title mb-2">{{ project.name }}</h5>
+                                    <p class="card-text mb-0">{{ project.description|truncatechars:100 }} <em>Learn More</em></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% empty %}
+                    <p>No created projects. <br><br><a href="{% url 'create_project' %}" class="btn btn-success">Start a new project</a></p>
+                {% endfor %}
+                </div>
+
+                <hr class="my-5">
+
+                {% if pending_memberships %}
+                <h2 class="mb-4">Pending Project Invites</h2>
+                <div class="row row-cols-1 row-cols-md-1 g-4">
+                <!-- TODO: Add pagination -->
+                {% for membership in pending_memberships %}
+                    <div class="col mb-3">
+                        <a href="{% url 'project_detail' membership.project.id %}" class="results--person">
+                            <div class="card">
+                              <div class="row g-0">
+                                <div class="col-2 p-2">
+                                {% if membership.project.profile_picture %}
+                                    <img src="{{ membership.project.profile_picture.url }}" class="img-fluid rounded" alt="Avatar image for {{ membership.project.name }}">
+                                {% else %}
+                                    <img src="{% static 'custom/images/project-pfp-generic.jpg' %}" class="img-fluid rounded" alt="Avatar image for this project.">
+                                {% endif %}
+                                </div>
+                                <div class="col-10 p-2 d-flex align-items-center">
+                                  <div class="card-body p-0">
+                                    <h5 class="card-title mb-1">{{ membership.project.name }}</h5>
+                                    <p class="card-text mb-0">{{ membership.project.description|truncatechars:100 }} <em>Learn More</em></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </a>
+                        <div class="col d-flex justify-content-start mt-3">
+                            <a href="{% url 'respond_to_invite' membership.id 'accept' %}" class="btn btn-success btn-sm me-4">Accept</a>
+                            <a href="{% url 'respond_to_invite' membership.id 'decline' %}" class="btn btn-outline-danger btn-sm">Decline</a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p>No pending invitations.</p>
+                {% endfor %}
+                </div>
+
+                <hr class="mt-3 mb-5">
+                {% endif %}
+
+                <h2 class="mb-4">Joined Projects</h2>
+                <div class="row row-cols-1 row-cols-md-1 g-4">
+                <!-- TODO: Add pagination -->
+                {% for membership in active_memberships %}
+                    <div class="col">
+                        <a href="{% url 'project_detail' membership.project.id %}" class="results--person">
+                            <div class="card">
+                              <div class="row g-0">
+                                <div class="col-2 p-2">
+                                {% if membership.project.profile_picture %}
+                                    <img src="{{ membership.project.profile_picture.url }}" class="img-fluid rounded" alt="Avatar image for {{ membership.project.name }}">
+                                {% else %}
+                                    <img src="{% static 'custom/images/project-pfp-generic.jpg' %}" class="img-fluid rounded" alt="Avatar image for this project.">
+                                {% endif %}
+                                </div>
+                                <div class="col-10 p-2 d-flex align-items-center">
+                                  <div class="card-body p-0">
+                                    <h5 class="card-title mb-1">{{ membership.project.name }}</h5>
+                                    <p class="card-text mb-0">{{ membership.project.description|truncatechars:100 }} <em class="ps-2">Learn More</em></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% empty %}
+                    <p>No joined projects. <br><br><a href="{% url 'discover' %}" class="btn btn-primary">Find a project to join</a></p>
+                {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

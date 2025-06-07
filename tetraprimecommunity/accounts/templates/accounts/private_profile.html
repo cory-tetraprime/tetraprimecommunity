@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% load preferences_filters %}
+
+{% block title %}Private Profile{% endblock %}
+{% block body_class %}page-user-profile{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container-fluid">
+    <div class="col">
+        <div class="row">
+            <div id="profile--banner" style="background-image: url('{% static 'custom/images/user-banner-generic.jpg' %}');"></div>
+        </div>
+        <div class="row mt-3">
+            <!--<div class="col col-md-3 p-4">
+                {% comment %}
+                {% include 'accounts/includes/profile-nav-left.html' %}
+                {% endcomment %}
+            </div>-->
+            <div class="col p-4 px-5 pt-0 d-flex flex-column align-items-center position-relative">
+                <img src="{% static 'custom/images/user-pfp-generic.png' %}" alt="Profile Picture" class="profile-picture top-0 mb-4"> <!--position-absolute-->
+                <h1>Sorry, not sorry.</h1>
+                <p>We're respecting this user's privacy.</p>
+                <p>Thank you!</p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

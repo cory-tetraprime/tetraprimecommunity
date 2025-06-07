@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Groups{% endblock %}
+{% block body_class %}page-discover{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container">
+    <div class="row mt-3">
+        <div class="col-md-3 p-4">
+            {% include 'accounts/includes/profile-nav-left.html' %}
+        </div>
+        <div class="col-md-9 p-4 d-flex flex-column align-items-center mt-3">
+            <h1 class="text-center"><i class="bi bi-grid"></i> Groups</h1>
+            <div class="row mt-3">
+                <div class="col">
+                    Coming soon!
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

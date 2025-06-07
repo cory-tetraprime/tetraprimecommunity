@@ -1,0 +1,20 @@
+<h1>Your Inbox</h1>
+<ul>
+    {% for item in items %}
+        <li class="{% if not item.is_read %}unread{% endif %}">
+            <span class="item-type">
+                {% if item.item_type == 'message' %}
+                    📩 Message
+                {% else %}
+                    🔔 Alert
+                {% endif %}
+            </span>
+            <strong>{{ item.title|default:item.subject }}</strong>
+            <p>{{ item.body|truncatewords:15 }}</p>
+            <a href="{% if item.item_type == 'message' %}{% url 'read_message' item.id %}{% else %}{% url 'read_alert' item.id %}{% endif %}">
+                View Details
+            </a>
+            <span class="timestamp">{{ item.sent_at }}</span>
+        </li>
+    {% endfor %}
+</ul>

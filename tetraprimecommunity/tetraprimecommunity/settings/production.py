@@ -8,7 +8,7 @@ except ImportError:
     pass
 
 
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = env('DJANGO_SECRET_KEY', default="")
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=2592000)
@@ -22,3 +22,40 @@ ALLOWED_HOSTS = ['tpc-main-s1-10bd1dfc229e.herokuapp.com', 'tpc-main-119effefbba
 DATABASES = {
     "default": env.dj_db_url("DATABASE_URL", default="postgres://postgres2@db/postgres2")
 }
+
+STATIC_URL = "https://tetraprime.s3.amazonaws.com/static/"
+MEDIA_URL = "https://tetraprime.s3.amazonaws.com/media/"
+
+INSTALLED_APPS = INSTALLED_APPS + ["storages"]
+# STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# STORAGES = {
+#     "default": {
+#         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+#     },
+#     "staticfiles": {
+#         "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+#     },
+# }
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "location": "media",
+        }
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "location": "static",
+        }
+    },
+}
+
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default="")
+AWS_S3_REGION_NAME = 'us-east-1'
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default="")
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default="")
+AWS_QUERYSTRING_AUTH = False
+AWS_DEFAULT_ACL = None
+AWS_S3_FILE_OVERWRITE = False

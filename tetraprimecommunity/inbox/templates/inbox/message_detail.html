@@ -1,0 +1,24 @@
+{% block content %}
+<div class="message-detail">
+    <h1>Message Details</h1>
+
+    <!-- Message Information -->
+    <div class="message-meta">
+        <p><strong>From:</strong> {{ message.sender.username }}</p>
+        <p><strong>To:</strong> {{ message.receiver.username }}</p>
+        <p><strong>Sent:</strong> {{ message.sent_at|date:"M d, Y H:i" }}</p>
+    </div>
+
+    <!-- Message Content -->
+    <div class="message-content">
+        <h2>{{ message.subject }}</h2>
+        <p>{{ message.body|linebreaks }}</p>
+    </div>
+
+    <!-- Actions -->
+    <div class="message-actions">
+        <a href="{% url 'inbox' %}" class="btn">Back to Inbox</a>
+        <a href="{% url 'send_message' %}?receiver_username={{ message.sender.id }}" class="btn">Reply</a>
+    </div>
+</div>
+{% endblock %}

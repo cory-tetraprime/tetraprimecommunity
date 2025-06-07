@@ -1,0 +1,108 @@
+html {
+  background: #fff;
+}
+html.dark-mode {
+  background-color: #161616;
+}
+
+body {
+  background: #fff;
+  background: linear-gradient(180deg, rgb(179, 200, 233) 0%, rgb(255, 255, 255) 60%);
+  background-repeat: no-repeat;
+  color: #000;
+}
+body a {
+  color: #000;
+  text-decoration: none;
+}
+body.dark-mode {
+  background-color: #161616;
+  background: linear-gradient(180deg, rgb(179, 200, 233) 0%, rgb(22, 22, 22) 60%);
+  color: #fff;
+}
+body.dark-mode a {
+  color: #fff;
+}
+body header img.header--logo-40 {
+  height: 40px;
+}
+body header ul.nav {
+  font-size: 1.2rem;
+}
+body header input[type=search] {
+  background: transparent;
+  border: 0 solid #a7a7a7;
+  min-width: 240px;
+}
+body header input[type=search]::placeholder {
+  color: #555;
+}
+body.dark-mode header {
+  color: #000;
+}
+body.dark-mode header ul.nav li a {
+  color: #000;
+}
+body main {
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0px -10px 12px rgba(0, 0, 0, 0.1098039216);
+  overflow: hidden;
+  margin-bottom: 100px;
+}
+body main .profile-picture {
+  border: 6px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0px -10px 12px rgba(0, 0, 0, 0.1098039216);
+  height: 180px;
+  margin-top: -9rem;
+  width: 180px;
+}
+body.dark-mode main {
+  background-color: #161616;
+}
+body nav ul {
+  font-size: 1.4rem;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+body nav ul li {
+  margin-bottom: 1rem;
+}
+body nav ul li a {
+  transition: margin-left 0.3s;
+}
+body nav ul li a:hover {
+  margin-left: 0.4rem;
+}
+
+/* Profile Page */
+#profile--banner {
+  background-color: #5f9996;
+  background-size: cover;
+  background-position: center;
+  height: 240px;
+}
+
+/* Login page */
+.page-login main {
+  width: 360px;
+}
+
+/* Signup page */
+.page-signup main {
+  min-width: 360px;
+  max-width: 980px;
+  width: 50%;
+}
+
+/* Discover page */
+.page-discover a.results--person .card {
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.page-discover a.results--person:hover .card {
+  box-shadow: 0px 10px 12px #d7d7d7;
+  transform: translate(0, -6px);
+}

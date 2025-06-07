@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+{% load preferences_filters %}
+
+{% block title %}Project Planner{% endblock %}
+{% block body_class %}page-project-planner{% endblock %}
+
+{% block content %}
+
+{% include 'accounts/includes/header-tag.html' %}
+
+<main class="container-fluid">
+    <div class="col">
+        <div class="row">
+            <div class="col-12 p-4 px-md-5 mt-3">
+                <h1 class="text-center"><i class="bi bi-calendar color-mediumseagreen"></i> Project Planner</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 p-4 d-none d-md-flex">
+                {% include 'projects/includes/projects-nav-left.html' %}
+            </div>
+            <div class="col px-4 px-md-5 py-4 d-flex flex-column">
+                <label for="project_select" class="fw-bold mb-1"> {{ combined_projects|length }} Active Projects:</label>
+
+                <div class="d-flex align-items-center">
+                    <!-- Select Dropdown -->
+                    <div class="flex-grow-1">
+                        <select name="project_select" id="project_select" class="form-select fs-5" style="border-left: 4px solid mediumseagreen;">
+                            <option value="0" selected>All Projects</option>
+                            {% for project in combined_projects %}
+                            <option value="{{ project.id }}">{{ project.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="ms-3">
+                        <button type="button" class="btn btn-primary" onclick="navigateToPlanner()">Select</button>
+                    </div>
+                </div>
+                <script>
+                    function navigateToPlanner() {
+                        // Get the selected value from the dropdown
+                        const selectElement = document.getElementById('project_select');
+                        const selectedValue = selectElement.value;
+
+                        // Redirect to the constructed URL if a valid option is selected
+                        if (selectedValue && selectedValue !== "All Projects") {
+                            window.location.href = `/projects/${selectedValue}/planner/`;
+                        } else {
+                            alert('Please select a valid project.');
+                        }
+                    }
+                </script>
+                <hr>
+
+                {% if project %}
+                <br>
+                <h2 class="mb-3">{{ project.name }}</h2>
+                <div class="accordion mb-4" id="accordionAddNextAction">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddNextAction" aria-expanded="true" aria-controls="collapseOne">
+                        <i class="bi bi-check2-circle color-green me-1"></i> Add Next Action
+                      </button>
+                    </h2>
+                    <div id="collapseAddNextAction" class="accordion-collapse collapse" data-bs-parent="#accordionAddNextAction">
+                      <div class="accordion-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <label for="action_title"><span class="fw-bold me-2">Action Title</span> <small>50 chars max</small></label>
+                            <input type="text" name="title" id="action_title" maxlength="50" class="form-control mb-3">
+                            <label for="action_stage" class="fw-bold">Initial Action Stage</label>
+                            <select name="action_stage" id="action_stage" class="form-control mb-3">
+                                <option value="someday">Someday</option>
+                                <option value="backlog" selected>Backlog</option>
+                                <option value="progress">In Progress</option>
+                            </select>
+
+                            <label for="action_due_date" class="fw-bold">Due By Date</label>
+                            <input type="date" name="due_date" id="action_due_date" class="form-control mb-3">
+                            <label for="action_notes"><span class="fw-bold me-2">Initial Notes or Comments</span> <small>500 chars max</small></label>
+                            <textarea name="notes" rows="4" id="action_notes" maxlength="500" class="form-control mb-3"></textarea>
+                            <button type="submit" name="add_action" class="btn btn-success btn-sm">Save Next Action</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                <h3 class="mb-3 mt-4"><!--{{ actions|length }}--> Next Actions</h3>
+                <div>
+                    <form method="post" class="d-flex align-items-between justify-content-between gap-2 mb-5">
+                        {% csrf_token %}
+                        <label class="form-label fs-5 mb-0"><strong>Filter:</strong></label>
+                        <button type="submit" name="action_stage" value="progress" class="btn btn-sm rounded-pill {% if selected_stage == 'progress' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">In Progress</button>
+                        <button type="submit" name="action_stage" value="review" class="btn btn-sm rounded-pill {% if selected_stage == 'review' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">In Review</button>
+                        <button type="submit" name="action_stage" value="backlog" class="btn btn-sm rounded-pill {% if selected_stage == 'backlog' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">Backlog</button>
+                        <button type="submit" name="action_stage" value="someday" class="btn btn-sm rounded-pill {% if selected_stage == 'someday' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">Someday</button>
+                        <button type="submit" name="action_stage" value="complete" class="btn btn-sm rounded-pill {% if selected_stage == 'complete' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">Complete</button>
+                        <button type="submit" name="action_stage" value="archived" class="btn btn-sm rounded-pill {% if selected_stage == 'archived' %}btn-secondary{% else %}btn-outline-secondary{% endif %}">Archived</button>
+                    </form>
+                </div>
+                {% if actions %}
+                    {% for action_item in actions %}
+                    <div class="card mb-5 position-relative">
+                        <span class="position-absolute top-0 translate-middle-y badge rounded-pill
+                            {% if action_item.action_stage == 'progress' %}bg-success
+                            {% elif action_item.action_stage == 'backlog' %}bg-info-subtle color-blue
+                            {% elif action_item.action_stage == 'someday' %}bg-success-subtle color-green
+                            {% elif action_item.action_stage == 'review' %}bg-warning
+                            {% elif action_item.action_stage == 'complete' %}bg-dark
+                            {% elif action_item.action_stage == 'archived' %}bg-secondary-subtle text-secondary
+                            {% else %}bg-secondary{% endif %}
+                        " style="left: 1.5rem;">
+                            {{ action_item.get_action_stage_display }}
+                        </span>
+
+                        {% if action_item.due_date %}
+                            {% if action_item.is_due_today %}
+                                <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-warning text-bg-warning" style="right: 10px;">Due Today: {{ action_item.due_date }}</span>
+                            {% elif action_item.is_overdue and action_item.action_stage != 'complete' and action_item.action_stage != 'archived' %}
+                                <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-danger" style="right: 10px;">OVERDUE: {{ action_item.due_date }}</span>
+                            {% elif action_item.action_stage == 'complete' or action_item.action_stage == 'archived' %}
+                                <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-secondary-subtle text-secondary" style="right: 10px;">Was Due: {{ action_item.due_date }}</span>
+                            {% else %}
+                                <span class="position-absolute top-0 translate-middle-y badge rounded-pill bg-outline-green color-green bg-white" style="right: 10px;">Due By: {{ action_item.due_date }}</span>
+                            {% endif %}
+                        {% endif %}
+
+                        <div class="card-body p-4">
+                            <h4 class="card-title">{{ action_item.title }}</h4>
+                            <p class="card-text">{{ action_item.notes|truncatewords:20 }}</p>
+                            <div class="row">
+                                <div class="col">
+                                    <p class="card-text mb-1 text-secondary">Project: {{ action_item.project.name }}</p>
+                                    <!--<p class="card-text mb-1">Assigned: @{{ action_item.assigned_to.user }}</p>-->
+                                    <p class="card-text text-secondary">Updated: {{ action_item.updated_at }}</p>
+                                </div>
+                                <div class="col d-flex justify-content-end align-items-end">
+                                    <a href="{% url 'view_next_action' action_item.id %}" class="btn btn-outline-secondary btn-sm" aria-label=""><i class="bi bi-eye me-1"></i> View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No next actions. Create one!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

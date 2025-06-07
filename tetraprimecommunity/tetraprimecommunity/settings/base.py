@@ -56,9 +56,13 @@ INSTALLED_APPS = [
     # Custom apps
     'images',
     'documents',
+    'social',
+    'projects',
+    'inbox',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 WAGTAILIMAGES_IMAGE_MODEL = 'images.CustomImage'
 WAGTAILDOCS_DOCUMENT_MODEL = 'documents.CustomDocument'
@@ -73,6 +77,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'accounts.middleware.CustomTimezoneMiddleware',
 ]
 
 ROOT_URLCONF = "tetraprimecommunity.urls"
@@ -90,6 +95,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # 'accounts.context_processors.global_variables',
+                'inbox.context_processors.unread_counts_processor',
             ],
         },
     },
@@ -197,13 +204,13 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
-            'level': 'DEBUG',  # You can change this to INFO or any other level
+            'level': 'DEBUG',  # Keep this if you want detailed output during development
             'class': 'logging.StreamHandler',
         },
     },
     'root': {
         'handlers': ['console'],
-        'level': 'DEBUG',
+        'level': 'INFO',  # Change from DEBUG to INFO or WARNING to reduce overall verbosity
     },
     'loggers': {
         'django': {
@@ -219,6 +226,22 @@ LOGGING = {
         'accounts': {
             'handlers': ['console'],
             'level': 'DEBUG',
+            'propagate': False,
+        },
+        # 🔻 Add these to suppress boto noise:
+        'boto3': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'botocore': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        's3transfer': {
+            'handlers': ['console'],
+            'level': 'WARNING',
             'propagate': False,
         },
     },

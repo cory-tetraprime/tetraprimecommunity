@@ -13,6 +13,10 @@ urlpatterns = [
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("search/", search_views.search, name="search"),
+    path('accounts/', include('accounts.urls')),
+    path('social/', include('social.urls')),
+    path('projects/', include('projects.urls')),
+    path('inbox/', include('inbox.urls')),
 ]
 
 

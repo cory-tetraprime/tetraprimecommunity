@@ -1,0 +1,369 @@
+html {
+    background: #fff;
+}
+
+body {
+    background: #fff;
+    background: linear-gradient(180deg, rgb(179,200,233) 0%, rgb(255,255,255) 60%);
+    background-repeat: no-repeat;
+    color: #000;
+
+    .color-gold { color: gold; }
+
+    a {
+        color: #000;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background-color: #0056b3; /* New background color */
+        border-color: #004085; /* New border color */
+        color: #ffffff; /* New text color */
+    }
+
+    .btn-primary:hover {
+        background-color: #004085; /* Darker background on hover */
+        border-color: #003060; /* Darker border on hover */
+    }
+
+    @media (min-width: 1200px) {
+        header .container, main.container {
+            max-width: 960px;
+        }
+    }
+
+    header {
+        img.header--logo-40 {
+            height: 40px;
+        }
+
+        ul.nav {
+            font-size: 1.2rem;
+        }
+
+        input[type="search"] {
+            background: transparent;
+            border: 0 solid #a7a7a7;
+            min-width: 240px;
+        }
+
+        input[type="search"]::placeholder {
+            color: #555;
+        }
+
+        .header--userdropdown button {
+        }
+    }
+
+    &.dark-mode {
+        header {
+            color: #000;
+
+            ul.nav li a {
+                color: #000;
+            }
+
+        }
+    }
+
+    main {
+        background-color: #fff;
+        border-radius: 1rem;
+        box-shadow: 0px -10px 12px #0000001c;
+        overflow: hidden;
+        margin-bottom: 100px;
+
+        .profile-picture {
+            border: 6px solid #fff;
+            border-radius: 4rem;
+            box-shadow: 0px -10px 12px #0000001c;
+            height: 200px;
+            margin-top: -7rem;
+            width: 200px
+
+        }
+
+        /* Icons  */
+        .btn-outline-primary {
+            &:hover {
+                .bi {
+                    color: #fff;
+                }
+            }
+        }
+
+        .bi-cookie {
+            color: #713f21;
+
+            &::before {
+                background-color: #eb9e52;
+                border-radius: 100%;
+            }
+        }
+
+//         .bi-people-fill {
+//             color: #457dd5;
+//         }
+    }
+
+    &.dark-mode {
+        main {
+            background-color: #161616;
+        }
+    }
+
+    nav {
+        ul {
+            font-size: 1.4rem;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                margin-bottom: 1rem;
+
+                a {
+                    transition: margin-left .3s;
+
+                    &:hover {
+                        margin-left: .4rem;
+                    }
+                }
+            }
+        }
+    }
+
+
+    /* Profile Page */
+    #profile--banner {
+        background-size: cover;
+        background-position: center;
+        height: 240px;
+    }
+
+    #profile--bio-intro {
+        font-size: 1.1rem;
+    }
+
+
+    /* Login page */
+    &.page-login main {
+        min-width: 390px;
+
+        ul.errorlist {
+            font-size: 1rem;
+            color: red;
+            line-height: 1.2rem;
+        }
+    }
+
+
+    /* Signup page */
+    &.page-signup main {
+        max-width: 720px;
+
+        ul.errorlist {
+            font-size: 1rem;
+            color: red;
+            line-height: 1.2rem;
+        }
+
+        input[type="text"] {
+            font-size: 1.2rem;
+        }
+    }
+
+
+    /* User Profile */
+    &.page-user-profile {
+        .accordion-button:focus {
+            box-shadow: none;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: #fff;
+        }
+        .accordion-button.collapsed {
+            color: #999;
+
+            i {
+                opacity: .4;
+            }
+        }
+        .accordion-item {
+            background-color: #fff;
+            border: none;
+        }
+    }
+
+
+    /* Edit Profile page */
+    &.page-edit-profile {
+        h1 {
+            color: #244872;
+
+            .bi {
+                color: #efc19f;
+            }
+        }
+    }
+
+
+    /* Discover page */
+    &.page-discover {
+
+        a.results--person .card {
+            transition: box-shadow .3s, transform .3s;
+
+            .card-body {
+                padding: .8rem 0 0 1rem;
+            }
+        }
+
+        a.results--person:hover .card {
+            box-shadow: 0px 10px 12px #d7d7d7;
+            transform: translate(0, -6px);
+        }
+    }
+
+
+    /* Feature - Onboarding */
+    #feature-onboarding {
+        h2 {
+            color: green;
+        }
+
+        .progress-bar {
+            background-color: orange;
+        }
+
+        .bi-check-circle-fill {
+            color: green;
+        }
+
+        .list-group-item {
+
+            &:hover {
+                background-color: #f3f3f3;
+            }
+        }
+    }
+
+}
+
+
+html.dark-mode {
+    background-color: #161616;
+}
+
+body.dark-mode {
+    background-color: #161616;
+    background: linear-gradient(180deg, rgb(179,200,233) 0%, rgb(22,22,22) 60%);
+    color: #e0e0e0;
+
+    main {
+
+        a {
+            color: #e0e0e0;
+        }
+
+        .profile-picture {
+            border: 6px solid #555;
+        }
+    }
+
+    .accordion-button {
+        background-color: #161616;
+    }
+
+    &.page-user-profile .accordion-item {
+        background-color: #161616;
+        color: #e0e0e0;
+    }
+
+    &.page-user-profile .accordion-button:not(.collapsed) {
+        background-color: #161616;
+        color: #e0e0e0;
+    }
+
+    .accordion-button:not(.collapsed) {
+        box-shadow: none;
+    }
+
+    .header--userdropdown {
+        background-color: #161616;
+        color: #e0e0e0;
+
+        .dropdown-item {
+            color: #e0e0e0;
+
+            &:hover {
+                background-color: #555;
+                color: #e0e0e0;
+            }
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid #555;
+        }
+    }
+
+    &.page-discover {
+
+        .card {
+            background-color: #222;
+            border-color: #555;
+            color: #e0e0e0;
+        }
+
+        a.results--person:hover .card {
+            box-shadow: 0px 10px 12px #333;
+        }
+    }
+
+    &.page-edit-profile {
+        .form-control, .form-select {
+            background-color: #222;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+
+        .accordion-item {
+            background-color: #161616;
+            border-color: #222;
+            color: #999;
+        }
+
+        .accordion-button {
+            color: #777;
+        }
+
+        .accordion-button:not(.collapsed) {
+            color: #e0e0e0;
+        }
+    }
+
+    #feature-onboarding {
+
+        .list-group-item {
+            background-color: #161616;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+
+        a#hide-onboarding {
+            color: #555 !important;
+        }
+
+        .progress {
+            background-color: #555;
+
+            .progress-bar {
+                background-color: #a57100;
+            }
+        }
+    }
+}
+
+
+@import 'colors';

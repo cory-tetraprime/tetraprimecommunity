@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign-up{% endblock %}
+{% block body_class %}page-signup d-flex align-items-center py-4 bg-body-tertiary{% endblock %}
+
+{% block content %}
+<main class="form-signup col-11 mx-3 mx-md-auto mt-md-3 p-4 p-md-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mt-2 mb-5"><img src="{% static 'img/TPC_Logo__--v1_--1K.original.png' %}" loading="lazy" width="50px" class="float-start me-2">Sign up!</h1>
+            <form method="post" enctype="multipart/form-data" class="fs-5">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="id_username" class="form-label">Username</label>
+                        {{ form.username }}
+                        {{ form.username.errors }}
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_email" class="form-label">Email</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_first_name" class="form-label">First Name</label>
+                        {{ form.first_name }}
+                        {{ form.first_name.errors }}
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_last_name" class="form-label">Last Name</label>
+                        {{ form.last_name }}
+                        {{ form.last_name.errors }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="id_country" class="form-label">Country</label>
+                        {{ form.country }}
+                        {{ form.country.errors }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="id_timezone" class="form-label">Timezone*</label>
+                        <select required id="id_timezone" name="timezone" class="form-select">
+                            <option value="" selected>Select your timezone</option>
+                            {% for tz, label in TIMEZONE_CHOICES %}
+                                <option value="{{ tz }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        {{ form.timezone.errors }}
+                    </div>
+                    <div class="col-12 mb-4">
+                        <p class="fs-6 m-0 text-black-50"><i class="bi bi-patch-question"></i> Helps with localization, currency, language, & analytics.</p>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_password1" class="form-label">Password</label>
+                        {{ form.password1 }}
+                        {{ form.password1.errors }}
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_password2" class="form-label">Confirm Password</label>
+                        {{ form.password2 }}
+                        {{ form.password2.errors }}
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label for="id_invite_code" class="form-label">Invite Code</label>
+                        {{ form.invite_code }}
+                        {{ form.invite_code.errors }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg m-auto mt-3 d-block">Sign Up</button>
+            </form>
+            <br>
+            <p class="text-center">Have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+        </div>
+        <!--<div class="col-12 col-md-5 rounded" style="background: url('{% static 'custom/images/signup-inset-1.jpg' %}') center;">
+            <img src="{% static 'custom/images/signup-inset-1.jpg' %}" class="w-100 p-4">
+        </div>-->
+    </div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const timezoneDropdown = document.getElementById('id_timezone');
+        if (timezoneDropdown) {
+            const option = Array.from(timezoneDropdown.options).find(opt => opt.value === userTimezone);
+            if (option) {
+                timezoneDropdown.value = userTimezone;
+            }
+        }
+    });
+</script>
+{% endblock content %}

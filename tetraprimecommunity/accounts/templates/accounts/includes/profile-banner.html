@@ -1,0 +1,11 @@
+{% load static %}
+
+{% if user.banner_image %}
+<div id="profile--banner" style="background-image: url('{{ user.banner_image.url }}');"></div>
+{% else %}
+<div id="profile--banner" style="background-image: url('{% static 'custom/images/user-banner-generic.jpg' %}');">
+<!--    <div id="navbar&#45;&#45;mobile" class="row p-2">
+        <div class="col-auto fs-3"><a href="#mobile-menu"><i class="bi bi-list"></i></a></div>
+    </div>-->
+</div>
+{% endif %}
